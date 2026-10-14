@@ -1,6 +1,19 @@
-{% extends "base.html" %}{% load i18n %}
-{% block title %}{% translate "Нет доступа" %}{% endblock %}
+{% extends "portal/base.html" %}
+{% block title %}Нет доступа{% endblock %}
 {% block content %}
-  <h1>{% translate "Карточка преподавателя не найдена" %}</h1>
-  <p>{% translate "Ваш логин не привязан ни к одному преподавателю. Обратитесь к заведующему кафедрой — привязка делается в админ-панели, в карточке преподавателя, полем «Логин в системе»." %}</p>
+  <div class="card" style="max-width:620px">
+    <h1 style="margin-bottom:10px">Карточка преподавателя не найдена</h1>
+    <p>Вы вошли как <b>{{ request.user.username }}</b>, но этот логин не привязан ни к одному
+       преподавателю. Обратитесь к завкафедрой — привязка делается в админ-панели,
+       в карточке преподавателя, полем «Логин в системе».</p>
+    <p class="muted">Если у вас есть логин преподавателя — выйдите и войдите под ним.</p>
+    <div class="form-actions">
+      <form action="{% url 'logout' %}?next={% url 'login' %}" method="post">{% csrf_token %}
+        <button class="button" type="submit">Выйти и войти под другим логином</button>
+      </form>
+      {% if request.user.is_staff %}
+        <a class="button secondary" href="{% url 'dashboard:index' %}">Отчёты кафедры</a>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}

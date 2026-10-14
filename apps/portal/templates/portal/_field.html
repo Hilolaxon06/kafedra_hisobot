@@ -1,10 +1,10 @@
-{% load i18n %}<div class="field">
-  {% if field.widget_type == "checkbox" %}
-    <label>{{ field }} {{ field.label }}</label>
+<div class="field{% if field.errors %} has-error{% endif %}{% if field.widget_type == 'checkbox' %} checkbox{% endif %}">
+  {% if field.widget_type == 'checkbox' %}
+    <label for="{{ field.id_for_label }}">{{ field }} {{ field.label }}</label>
   {% else %}
-    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span style="color:var(--bad)">*</span>{% endif %}</label>
     {{ field }}
   {% endif %}
-  {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+  {% if field.help_text %}<span class="helptext">{{ field.help_text|safe }}</span>{% endif %}
   {{ field.errors }}
 </div>

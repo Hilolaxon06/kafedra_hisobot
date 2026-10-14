@@ -1,0 +1,109 @@
+{% extends "admin/index.html" %}
+{% load kafedra_admin %}
+{# Kafedra mudiri uchun bosh sahifa: bo‘limlar kartochkalar ko‘rinishida + ish tartibi. Superuser — standart sahifa. #}
+
+{% block extrastyle %}{{ block.super }}
+{% if request.user|is_mudiri %}
+<style>
+  body.kh-mudiri.dashboard #content { width: auto; max-width: 1240px; }
+  .kh-hero { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center;
+    background: linear-gradient(120deg, #2f5bea, #7c4dff); color: #fff; border-radius: 16px; padding: 24px 28px; margin-bottom: 22px; }
+  .kh-hero h1 { color: #fff !important; margin: 0 0 4px; font-size: 24px; }
+  .kh-hero p { margin: 0; opacity: .9; font-size: 14px; }
+  .kh-hero .kh-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .kh-hero .kh-actions a { background: rgba(255,255,255,.16); color: #fff; padding: 9px 14px; border-radius: 9px; font-weight: 600;
+    font-size: 13px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,.25); }
+  .kh-hero .kh-actions a:hover { background: rgba(255,255,255,.28); text-decoration: none; }
+  .kh-hero .kh-actions a.kh-solid { background: #fff; color: #2f5bea; }
+
+  .kh-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 0 0 26px; padding: 0; list-style: none; counter-reset: step; }
+  .kh-steps li { background: var(--kh-card); border: 1px solid var(--hairline-color); border-radius: 12px; padding: 12px 14px 12px 50px;
+    position: relative; font-size: 13px; color: var(--body-quiet-color); box-shadow: var(--kh-shadow); counter-increment: step; }
+  .kh-steps li::before { content: counter(step); position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--kh-soft); color: var(--primary); font-weight: 700; display: grid; place-items: center; }
+  .kh-steps li b { display: block; color: var(--body-fg); font-size: 13.5px; margin-bottom: 2px; }
+
+  .kh-section { margin-bottom: 26px; }
+  .kh-section-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; flex-wrap: wrap; }
+  .kh-section-head h2 { margin: 0; font-size: 17px; font-weight: 700; color: var(--body-fg); background: none; padding: 0; }
+  .kh-section-head span { color: var(--body-quiet-color); font-size: 13px; }
+  .kh-cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+  .kh-card { background: var(--kh-card); border: 1px solid var(--hairline-color); border-radius: 14px; padding: 16px; box-shadow: var(--kh-shadow);
+    display: flex; flex-direction: column; gap: 10px; transition: border-color .12s, transform .12s; }
+  .kh-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .kh-card-top { display: flex; gap: 12px; align-items: flex-start; }
+  .kh-ico { width: 40px; height: 40px; border-radius: 11px; background: var(--kh-soft); color: var(--primary); display: grid; place-items: center; flex: none; }
+  .kh-ico svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .kh-card h3 { margin: 0; font-size: 15px; font-weight: 600; color: var(--body-fg); }
+  .kh-card h3 a { color: inherit; }
+  .kh-card p { margin: 3px 0 0; font-size: 12.5px; color: var(--body-quiet-color); line-height: 1.45; }
+  .kh-count { margin-left: auto; font-size: 22px; font-weight: 700; color: var(--body-fg); line-height: 1; }
+  .kh-card-actions { display: flex; gap: 8px; margin-top: auto; }
+  .kh-card-actions a { flex: 1; text-align: center; padding: 7px 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1px solid var(--hairline-color); color: var(--body-fg); background: var(--darkened-bg); }
+  .kh-card-actions a:hover { border-color: var(--primary); color: var(--primary); text-decoration: none; }
+  .kh-card-actions a.kh-add { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .kh-card-actions a.kh-add:hover { filter: brightness(1.08); color: #fff; }
+  .kh-empty { padding: 18px; border-radius: 12px; background: var(--kh-card); border: 1px dashed var(--border-color); color: var(--body-quiet-color); }
+</style>
+{% endif %}
+{% endblock %}
+
+{% block coltype %}{% if request.user|is_mudiri %}colM{% else %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block content_title %}{% if request.user|is_mudiri %}{% else %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block content %}
+{% if request.user|is_mudiri %}
+  {% kh_departments as departments %}
+  <div class="kh-hero">
+    <div>
+      <h1>Assalomu alaykum, {% firstof request.user.teacher_profile.full_name request.user.get_full_name request.user.username %}!</h1>
+      <p>{% for d in departments %}{{ d.name }}{% if not forloop.last %}, {% endif %}{% empty %}Hisobingiz hali kafedraga biriktirilmagan — administratorga murojaat qiling.{% endfor %}</p>
+    </div>
+    <div class="kh-actions">
+      <a class="kh-solid" href="{% url 'dashboard:index' %}">⬇ Hisobotni yuklab olish</a>
+      <a href="{% url 'dashboard:teachers' %}">O‘qituvchilar jadvali</a>
+    </div>
+  </div>
+
+  <ol class="kh-steps">
+    <li><b>Hisobot davri</b>Yangi davr yarating (masalan, 2026-yil 1-yarim)</li>
+    <li><b>O‘qituvchilar</b>Qo‘shing va «Login yaratish» amalini bajaring</li>
+    <li><b>Shtat jadvali</b>Lavozim, stavka, daraja va unvonni kiriting</li>
+    <li><b>Ko‘rsatkichlar</b>O‘qituvchilar maqolalarini kabinetda kiritadi — siz tekshirasiz</li>
+    <li><b>Hisobot</b>«Hisobotni yuklab olish» — Excel va ZIP</li>
+  </ol>
+
+  {% kh_dashboard app_list as sections %}
+  {% for section in sections %}
+  <section class="kh-section">
+    <div class="kh-section-head"><h2>{{ section.title }}</h2>{% if section.desc %}<span>{{ section.desc }}</span>{% endif %}</div>
+    <div class="kh-cards">
+      {% for card in section.cards %}
+      <div class="kh-card">
+        <div class="kh-card-top">
+          <span class="kh-ico">{% kh_icon card.icon %}</span>
+          <div>
+            <h3>{% if card.admin_url %}<a href="{{ card.admin_url }}">{{ card.name }}</a>{% else %}{{ card.name }}{% endif %}</h3>
+            {% if card.desc %}<p>{{ card.desc }}</p>{% endif %}
+          </div>
+          {% if card.count is not None %}<span class="kh-count" title="Yozuvlar soni">{{ card.count }}</span>{% endif %}
+        </div>
+        <div class="kh-card-actions">
+          {% if card.admin_url %}<a href="{{ card.admin_url }}">{% if card.view_only %}Ko‘rish{% else %}Ro‘yxat{% endif %}</a>{% endif %}
+          {% if card.add_url %}<a class="kh-add" href="{{ card.add_url }}">+ Qo‘shish</a>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% empty %}
+  <div class="kh-empty">Sizga hali hech qanday bo‘lim uchun huquq berilmagan. Administrator guruhingizga kerakli huquqlarni berishi kerak.</div>
+  {% endfor %}
+{% else %}
+  {{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block sidebar %}{% if request.user|is_mudiri %}{% else %}{{ block.super }}{% endif %}{% endblock %}

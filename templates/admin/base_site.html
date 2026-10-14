@@ -1,0 +1,127 @@
+{% extends "admin/base.html" %}
+{% load kafedra_admin %}
+{# Kafedra mudiri (is_staff, superuser emas) uchun soddalashtirilgan va qayta bezatilgan admin-panel. Superuser — standart Django ko‘rinishi. #}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block bodyclass %}{% if request.user|is_mudiri %}kh-mudiri{% endif %}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+{% if request.user|is_mudiri %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body.kh-mudiri {
+    --primary: #2f5bea; --secondary: #141b2d; --accent: #ffffff; --primary-fg: #fff;
+    --body-fg: #1b2233; --body-bg: #ffffff; --body-quiet-color: #6b7489; --body-loud-color: #0d1220;
+    --header-color: #c9d1e4; --header-branding-color: #fff; --header-bg: #141b2d; --header-link-color: #fff;
+    --breadcrumbs-fg: #aab4cc; --breadcrumbs-link-fg: #fff; --breadcrumbs-bg: #1e2842;
+    --link-fg: #2f5bea; --link-hover-color: #1d3fb8; --link-selected-fg: #2f5bea;
+    --hairline-color: #e6e9f0; --border-color: #d5dae5;
+    --darkened-bg: #f4f6fa; --selected-bg: #eaf0ff; --selected-row: #fff8dc;
+    --button-fg: #fff; --button-bg: #2f5bea; --button-hover-bg: #2449c4;
+    --default-button-bg: #2449c4; --default-button-hover-bg: #1d3fb8;
+    --object-tools-bg: #2f5bea; --object-tools-hover-bg: #2449c4;
+    --kh-page: #f4f6fa; --kh-card: #ffffff; --kh-soft: #eaf0ff; --kh-shadow: 0 1px 2px rgba(20,27,45,.05), 0 4px 16px rgba(20,27,45,.06);
+    --font-family-primary: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--kh-page);
+  }
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] body.kh-mudiri, html:not([data-theme]) body.kh-mudiri {
+      --primary: #6b8cff; --body-fg: #e6e9f2; --body-bg: #171e30; --body-quiet-color: #96a0b8; --body-loud-color: #fff;
+      --header-bg: #0b1020; --breadcrumbs-bg: #1a2238; --link-fg: #8ea8ff; --link-hover-color: #b3c4ff; --link-selected-fg: #8ea8ff;
+      --hairline-color: #2a3349; --border-color: #38425c; --darkened-bg: #1c2438; --selected-bg: #1f2a4d; --selected-row: #2d2a17;
+      --button-bg: #4a6cf0; --button-hover-bg: #5b7bff; --default-button-bg: #5b7bff; --default-button-hover-bg: #6b8cff;
+      --object-tools-bg: #4a6cf0; --object-tools-hover-bg: #5b7bff;
+      --kh-page: #0f1422; --kh-card: #171e30; --kh-soft: #1f2a4d; --kh-shadow: 0 1px 2px rgba(0,0,0,.3);
+    }
+  }
+  html[data-theme="dark"] body.kh-mudiri {
+    --primary: #6b8cff; --body-fg: #e6e9f2; --body-bg: #171e30; --body-quiet-color: #96a0b8; --body-loud-color: #fff;
+    --header-bg: #0b1020; --breadcrumbs-bg: #1a2238; --link-fg: #8ea8ff; --link-hover-color: #b3c4ff; --link-selected-fg: #8ea8ff;
+    --hairline-color: #2a3349; --border-color: #38425c; --darkened-bg: #1c2438; --selected-bg: #1f2a4d; --selected-row: #2d2a17;
+    --button-bg: #4a6cf0; --button-hover-bg: #5b7bff; --default-button-bg: #5b7bff; --default-button-hover-bg: #6b8cff;
+    --object-tools-bg: #4a6cf0; --object-tools-hover-bg: #5b7bff;
+    --kh-page: #0f1422; --kh-card: #171e30; --kh-soft: #1f2a4d; --kh-shadow: 0 1px 2px rgba(0,0,0,.3);
+  }
+
+  body.kh-mudiri, body.kh-mudiri input, body.kh-mudiri select, body.kh-mudiri textarea, body.kh-mudiri button { font-family: var(--font-family-primary); }
+  body.kh-mudiri #header { padding: 12px 28px; box-shadow: 0 1px 0 rgba(255,255,255,.06); }
+  body.kh-mudiri #site-name a { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; }
+  body.kh-mudiri .kh-mark { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; color: #fff; font-size: 15px;
+    background: linear-gradient(135deg, #4f7bff, #7c4dff); }
+  body.kh-mudiri #user-tools { font-size: 13px; text-transform: none; letter-spacing: 0; }
+  body.kh-mudiri #user-tools a, body.kh-mudiri #logout-form button { border-bottom: 0; padding: 5px 10px; border-radius: 7px; text-transform: none; }
+  body.kh-mudiri #user-tools a:hover, body.kh-mudiri #logout-form button:hover { background: rgba(255,255,255,.1); text-decoration: none; }
+  body.kh-mudiri div.breadcrumbs { padding: 10px 28px; font-size: 13px; }
+  body.kh-mudiri #content { padding: 24px 28px; }
+  body.kh-mudiri #main { background: var(--kh-page); }
+  body.kh-mudiri #content-main, body.kh-mudiri .module { border-radius: 12px; }
+  body.kh-mudiri .module { background: var(--kh-card); border: 1px solid var(--hairline-color); box-shadow: var(--kh-shadow); overflow: hidden; }
+  body.kh-mudiri .module h2, body.kh-mudiri .module caption, body.kh-mudiri .inline-group h2 {
+    background: var(--darkened-bg); color: var(--body-fg); font-weight: 600; font-size: 13px; text-transform: none; letter-spacing: 0; padding: 10px 14px; }
+  body.kh-mudiri fieldset.module { padding: 0; }
+  body.kh-mudiri .module caption a, body.kh-mudiri .module h2 a, body.kh-mudiri .module caption a.section:link,
+  body.kh-mudiri .module caption a.section:visited { color: var(--body-fg); }
+  body.kh-mudiri .object-tools a.addlink:link, body.kh-mudiri .object-tools a.addlink:visited { padding-right: 32px; background-position: right 10px center; }
+  body.kh-mudiri .form-row { padding: 12px 16px; }
+  body.kh-mudiri input[type=text], body.kh-mudiri input[type=password], body.kh-mudiri input[type=email], body.kh-mudiri input[type=url],
+  body.kh-mudiri input[type=number], body.kh-mudiri input[type=date], body.kh-mudiri textarea, body.kh-mudiri select, body.kh-mudiri .vTextField {
+    border-radius: 7px; padding: 7px 10px; border-color: var(--border-color); }
+  body.kh-mudiri input:focus, body.kh-mudiri select:focus, body.kh-mudiri textarea:focus { border-color: var(--primary); outline: 2px solid var(--kh-soft); }
+  body.kh-mudiri .button, body.kh-mudiri input[type=submit], body.kh-mudiri input[type=button], body.kh-mudiri .submit-row input, body.kh-mudiri a.button {
+    border-radius: 8px; padding: 9px 16px; font-weight: 600; }
+  body.kh-mudiri .submit-row { border-radius: 12px; border: 1px solid var(--hairline-color); background: var(--kh-card); padding: 14px 16px; }
+  body.kh-mudiri .submit-row a.deletelink { border-radius: 8px; height: auto; padding: 9px 16px; }
+  body.kh-mudiri .object-tools a:link, body.kh-mudiri .object-tools a:visited { border-radius: 8px; padding: 7px 14px; text-transform: none; letter-spacing: 0; font-size: 13px; font-weight: 600; }
+  body.kh-mudiri #changelist .actions { border-radius: 10px 10px 0 0; }
+  body.kh-mudiri #changelist table thead th { text-transform: none; font-size: 12.5px; }
+  body.kh-mudiri #changelist-filter { border-radius: 12px; overflow: hidden; border: 1px solid var(--hairline-color); }
+  body.kh-mudiri #changelist-filter h2 { text-transform: none; letter-spacing: 0; }
+  body.kh-mudiri .paginator { border-radius: 0 0 12px 12px; }
+  body.kh-mudiri #nav-sidebar { background: var(--kh-card); border-right: 1px solid var(--hairline-color); }
+  body.kh-mudiri #nav-sidebar .module { box-shadow: none; border-radius: 10px; margin-bottom: 10px; }
+  body.kh-mudiri #nav-sidebar .current-model { background: var(--kh-soft); }
+  body.kh-mudiri .toggle-nav-sidebar { background: var(--kh-card); border-color: var(--hairline-color); }
+  body.kh-mudiri ul.messagelist li { border-radius: 10px; margin: 0 0 8px; }
+  body.kh-mudiri h1 { font-weight: 700; font-size: 22px; color: var(--body-fg); }
+  body.kh-mudiri .help, body.kh-mudiri p.help, body.kh-mudiri div.help { color: var(--body-quiet-color); }
+  @media (max-width: 767px) {
+    body.kh-mudiri #header, body.kh-mudiri div.breadcrumbs, body.kh-mudiri #content { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+{% endif %}
+{% endblock %}
+
+{% block branding %}
+{% if request.user|is_mudiri %}
+<div id="site-name"><a href="{% url 'admin:index' %}"><span class="kh-mark">K</span>Kafedra hisoboti</a></div>
+{% else %}
+<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></div>
+{% endif %}
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block welcome-msg %}
+{% if request.user|is_mudiri %}{% else %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block userlinks %}
+{% if request.user|is_mudiri %}
+  <a href="{% url 'dashboard:index' %}">Hisobotlarni yuklab olish</a>
+  <a href="{% url 'dashboard:teachers' %}">O‘qituvchilar jadvali</a>
+  {% if request.user.teacher_profile %}<a href="{% url 'portal:index' %}">Mening kabinetim</a>{% endif %}
+  {% if user.has_usable_password %}<a href="{% url 'admin:password_change' %}">Parolni o‘zgartirish</a>{% endif %}
+  <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
+    {% csrf_token %}
+    <button type="submit">Chiqish</button>
+  </form>
+  {% include "admin/color_theme_toggle.html" %}
+{% else %}
+  {{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

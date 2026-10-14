@@ -1,28 +1,42 @@
-{% extends "base.html" %}{% load i18n %}
-{% block title %}{% translate "Отчёты кафедры" %}{% endblock %}
+{% extends "base.html" %}
+{% block title %}Отчётные периоды{% endblock %}
 {% block content %}
-  <h1>{% translate "Отчётные периоды" %}</h1>
-  <p class="muted">{% translate "Преподаватели вносят свои данные и файлы в личном кабинете. Здесь — ход заполнения и выгрузка: Excel-отчёт по форме и отдельно ZIP-архив всех загруженных файлов по разделам. Штатная ведомость, периоды и логины — в админ-панели." %}</p>
-  <div class="table-wrap"><table>
-    <thead>
-      <tr><th>{% translate "Кафедра" %}</th><th>{% translate "Период" %}</th><th>{% translate "Дата" %}</th><th>{% translate "Статус" %}</th><th></th></tr>
-    </thead>
-    <tbody>
-      {% for period in periods %}
-      <tr>
-        <td>{{ period.department }}</td>
-        <td><a href="{% url 'dashboard:progress' period.id %}">{{ period.period_label }}</a></td>
-        <td>{{ period.period_date|date:"d.m.Y" }}</td>
-        <td>{{ period.get_status_display }}</td>
-        <td style="white-space:nowrap">
-          <a class="button secondary" href="{% url 'dashboard:progress' period.id %}">{% translate "Ход заполнения" %}</a>
-          <a class="button" href="{% url 'dashboard:download_report' period.id %}">Excel</a>
-          <a class="button" href="{% url 'dashboard:download_files' period.id %}">{% translate "Файлы (ZIP)" %}</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="5">{% translate "Периоды ещё не созданы — добавьте в админ-панели (Отчётные периоды)." %}</td></tr>
-      {% endfor %}
-    </tbody>
-  </table></div>
+  <div class="page-head">
+    <div>
+      <h1>Отчётные периоды</h1>
+      <p class="subtitle">Готовый отчёт по уже накопленным данным. Кадровые данные и справочники —
+        в <a href="{% url 'admin:index' %}">админ-панели</a>; статьи и h-индекс преподаватели вносят сами в личном кабинете.</p>
+    </div>
+  </div>
+
+  {% if no_department %}
+    <ul class="messages"><li class="warning">Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan, shuning uchun hisobotlar koʻrinmaydi.
+      Administrator admin-panelda oʻqituvchi kartochkasining «Логин в системе» maydoniga hisobingizni biriktirishi kerak.</li></ul>
+  {% endif %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Кафедра</th><th>Период</th><th>Дата</th><th>Статус</th><th>Maqolalar</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for period in periods %}
+        <tr>
+          <td><b>{{ period.department }}</b></td>
+          <td>{{ period.period_label }}</td>
+          <td>{{ period.period_date|date:"d.m.Y" }}</td>
+          <td><span class="badge status-{{ period.status }}">{{ period.get_status_display }}</span></td>
+          <td class="num">{{ period.publications_count }} <span class="muted">· PDF: {{ period.files_count }}</span></td>
+          <td class="actions">
+            <a class="button small" href="{% url 'dashboard:download_package' period.id %}"
+               title="Reyting jadvali + maqolalar ro‘yxati + har bir o‘qituvchining maqolalari alohida papkada">
+              <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>Hammasi (ZIP)</a>
+            <a class="button secondary small" href="{% url 'dashboard:download_report' period.id %}">.xlsx</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td class="empty" colspan="6">Периоды ещё не созданы — добавьте в админке (Workflow → Отчётные периоды).</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

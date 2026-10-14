@@ -1,0 +1,79 @@
+<div class="perm-matrix" id="{{ widget.attrs.id|default:'perm-matrix' }}">
+  <style>
+    .perm-matrix { max-width: 900px; }
+    .perm-matrix .pm-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .perm-matrix .pm-tools button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--hairline-color, #ddd);
+      background: var(--body-bg, #fff); color: var(--body-fg, #333); cursor: pointer; font-size: 13px; }
+    .perm-matrix .pm-tools button.pm-primary { background: var(--button-bg, #417690); border-color: transparent; color: var(--button-fg, #fff); }
+    .perm-matrix .pm-tools button:hover { filter: brightness(1.06); }
+    .perm-matrix table { width: 100%; border-collapse: collapse; margin-bottom: 14px; border: 1px solid var(--hairline-color, #ddd); }
+    .perm-matrix caption { text-align: left; font-weight: 600; padding: 8px 10px; font-size: 13px;
+      background: var(--darkened-bg, #f8f8f8); color: var(--body-fg, #333); border: 1px solid var(--hairline-color, #ddd); border-bottom: 0; }
+    .perm-matrix th, .perm-matrix td { padding: 7px 10px; border-top: 1px solid var(--hairline-color, #eee); font-size: 13px; }
+    .perm-matrix thead th { font-weight: 600; text-align: center; width: 110px; color: var(--body-quiet-color, #666); }
+    .perm-matrix thead th:first-child { text-align: left; width: auto; }
+    .perm-matrix td.pm-cell { text-align: center; }
+    .perm-matrix td.pm-cell input { width: 17px; height: 17px; cursor: pointer; margin: 0; }
+    .perm-matrix td.pm-row-label { cursor: pointer; }
+    .perm-matrix td.pm-row-label:hover { color: var(--link-hover-color, #036); }
+    .perm-matrix .pm-none { color: var(--body-quiet-color, #aaa); }
+    .perm-matrix .pm-hint { color: var(--body-quiet-color, #666); font-size: 12px; margin: 0 0 10px; }
+  </style>
+
+  <p class="pm-hint">Bu yerda faqat kafedra ishi uchun kerakli huquqlar ko‘rsatilgan. Qator nomini bossangiz — butun qator belgilanadi/olib tashlanadi.</p>
+  <div class="pm-tools">
+    <button type="button" class="pm-primary" data-pm="recommended">Kafedra mudiri uchun tavsiya etilganlar</button>
+    <button type="button" data-pm="view">Faqat ko‘rish</button>
+    <button type="button" data-pm="all">Hammasini belgilash</button>
+    <button type="button" data-pm="none">Hammasini olib tashlash</button>
+  </div>
+
+  {% for section in widget.sections %}
+  <table>
+    <caption>{{ section.title }}</caption>
+    <thead><tr><th>Bo‘lim</th>{% for code, label in widget.actions %}<th>{{ label }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for row in section.rows %}
+      <tr>
+        <td class="pm-row-label" title="Butun qatorni belgilash">{{ row.label }}</td>
+        {% for cell in row.cells %}
+        <td class="pm-cell">
+          {% if cell %}
+          <input type="checkbox" name="{{ widget.name }}" value="{{ cell.id }}" title="{{ cell.title }}"
+                 data-action="{{ forloop.counter }}"{% if cell.recommended %} data-recommended="1"{% endif %}{% if cell.checked %} checked{% endif %}>
+          {% else %}<span class="pm-none">—</span>{% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% empty %}
+  <p class="pm-none">Huquqlar topilmadi.</p>
+  {% endfor %}
+
+  <script>
+    (function () {
+      var root = document.currentScript.parentNode;
+      var boxes = function () { return Array.prototype.slice.call(root.querySelectorAll("input[type=checkbox]")); };
+      root.querySelectorAll("[data-pm]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var mode = btn.getAttribute("data-pm");
+          boxes().forEach(function (b) {
+            if (mode === "all") b.checked = true;
+            else if (mode === "none") b.checked = false;
+            else if (mode === "view") b.checked = b.getAttribute("data-action") === "1";
+            else if (mode === "recommended") b.checked = b.hasAttribute("data-recommended");
+          });
+        });
+      });
+      root.querySelectorAll(".pm-row-label").forEach(function (td) {
+        td.addEventListener("click", function () {
+          var row = Array.prototype.slice.call(td.parentNode.querySelectorAll("input[type=checkbox]"));
+          var on = row.some(function (b) { return !b.checked; });
+          row.forEach(function (b) { b.checked = on; });
+        });
+      });
+    })();
+  </script>
+</div>

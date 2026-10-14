@@ -1,93 +1,202 @@
-{% load i18n %}{% get_current_language as LANG %}<!doctype html>
-<html lang="{{ LANG }}">
+<!doctype html>
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{% translate "Отчётность кафедры" %}{% endblock %}</title>
+  <title>{% block title %}Кафедра — хисобот{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --accent: #1a5fb4; --ok: #1a7a3c; --warn: #a15c00; --bad: #a12626; --line: #e2e5ea; --muted: #6b7280; }
+    :root {
+      --bg: #f4f6fa; --surface: #ffffff; --surface-2: #f8f9fc; --text: #1b2233; --muted: #6b7489;
+      --line: #e3e7ef; --accent: #2f5bea; --accent-soft: #eaf0ff; --accent-text: #ffffff;
+      --ok: #148a4b; --ok-soft: #e3f6ea; --warn: #b26a00; --warn-soft: #fff3dc;
+      --bad: #c23434; --bad-soft: #fdeaea; --side: #141b2d; --side-text: #c9d1e4; --side-active: #263252;
+      --shadow: 0 1px 2px rgba(20, 27, 45, .05), 0 4px 16px rgba(20, 27, 45, .06);
+      --radius: 12px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1422; --surface: #171e30; --surface-2: #1c2438; --text: #e6e9f2; --muted: #96a0b8;
+        --line: #2a3349; --accent: #6b8cff; --accent-soft: #1f2a4d; --accent-text: #0f1422;
+        --ok: #4fd18b; --ok-soft: #173326; --warn: #f2b45a; --warn-soft: #3a2c14;
+        --bad: #ff7b7b; --bad-soft: #3b1c1f; --side: #0b1020; --side-text: #aab4cc; --side-active: #1e2842;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+      }
+    }
     * { box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; color: #1f2328; background: #f6f7f9; }
-    header { background: #fff; border-bottom: 1px solid var(--line); }
-    .bar { max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-    .brand { font-weight: 700; color: inherit; text-decoration: none; margin-right: auto; }
-    nav a { margin-right: 14px; color: var(--accent); text-decoration: none; }
-    main { max-width: 1100px; margin: 20px auto 60px; padding: 0 16px; }
-    h1 { font-size: 24px; margin: 0 0 6px; } h2 { font-size: 18px; margin: 24px 0 10px; }
-    a { color: var(--accent); }
-    .muted { color: var(--muted); font-size: 13px; }
-    .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
-    table { border-collapse: collapse; width: 100%; background: #fff; }
-    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 14px; }
-    th { background: #f0f2f5; font-weight: 600; }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
-    .button, button.button { display: inline-block; padding: 7px 14px; background: var(--accent); color: #fff; border: 0;
-      border-radius: 6px; text-decoration: none; font-size: 14px; cursor: pointer; }
-    .button.secondary { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
-    .button.danger { background: #fff; color: var(--bad); border: 1px solid var(--bad); }
-    .link-button { background: none; border: 0; color: var(--accent); cursor: pointer; padding: 0; font: inherit; }
-    .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; background: #eef1f5; }
-    .badge.ok { background: #e3f6e8; color: var(--ok); } .badge.warn { background: #fff4d9; color: var(--warn); }
-    .badge.bad { background: #fbe6e6; color: var(--bad); }
-    .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-    .messages li { padding: 9px 12px; border-radius: 6px; margin-bottom: 8px; }
-    .messages .success { background: #e3f6e8; color: var(--ok); } .messages .error { background: #fbe6e6; color: var(--bad); }
-    .messages .warning { background: #fff4d9; color: var(--warn); } .messages .info { background: #e8f0fb; color: var(--accent); }
-    form .field { margin: 12px 0; }
-    form label { display: block; font-size: 13px; color: #444; margin-bottom: 4px; font-weight: 600; }
-    form input[type=text], form input[type=number], form input[type=url], form input[type=date], form input[type=password],
-    form select, form textarea { width: 100%; max-width: 560px; padding: 7px 9px; border: 1px solid #c9ced6; border-radius: 6px; font-size: 14px; }
-    form .help { color: var(--muted); font-size: 12px; margin-top: 3px; }
-    form .errorlist { color: var(--bad); margin: 4px 0; padding-left: 18px; font-size: 13px; }
-    form ul#id_coauthors, form div#id_coauthors { list-style: none; padding: 0; columns: 2; max-width: 700px; }
-    form #id_coauthors label { font-weight: 400; }
-    fieldset { border: 1px solid var(--line); border-radius: 10px; background: #fff; margin: 0 0 14px; padding: 6px 16px 12px; }
-    legend { font-weight: 600; padding: 0 6px; }
-    .lang form { display: inline; }
-    .lang button { background: none; border: 1px solid var(--line); border-radius: 5px; padding: 2px 8px; cursor: pointer; }
-    .lang button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    html, body { margin: 0; }
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text);
+      font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ---- каркас: боковая панель + контент ---- */
+    .layout { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+    .layout.bare { grid-template-columns: 1fr; }
+    .side { background: var(--side); color: var(--side-text); padding: 20px 14px; position: sticky; top: 0; height: 100vh;
+      display: flex; flex-direction: column; gap: 4px; }
+    .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 700; font-size: 15px; padding: 4px 10px 18px; }
+    .brand:hover { text-decoration: none; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #4f7bff, #7c4dff);
+      display: grid; place-items: center; color: #fff; font-size: 15px; }
+    .brand small { display: block; font-weight: 500; font-size: 11px; color: var(--side-text); opacity: .8; }
+    .side-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; opacity: .55; padding: 14px 10px 6px; }
+    .side a.nav { display: flex; align-items: center; gap: 10px; color: var(--side-text); padding: 8px 10px; border-radius: 8px; font-weight: 500; }
+    .side a.nav:hover { background: var(--side-active); color: #fff; text-decoration: none; }
+    .side a.nav.active { background: var(--side-active); color: #fff; box-shadow: inset 3px 0 0 #6b8cff; }
+    .side svg { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .side-user { margin-top: auto; border-top: 1px solid rgba(255,255,255,.08); padding: 14px 10px 0; display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--side-active); color: #fff; display: grid; place-items: center;
+      font-weight: 600; flex: none; text-transform: uppercase; }
+    .side-user .who { min-width: 0; flex: 1; }
+    .side-user .who b { display: block; color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .side-user button { background: none; border: 0; color: var(--side-text); cursor: pointer; padding: 0; font: inherit; font-size: 12px; }
+    .side-user button:hover { color: #fff; text-decoration: underline; }
+
+    main { padding: 28px 36px 64px; max-width: 1240px; width: 100%; min-width: 0; }
+    .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+    h1 { font-size: 24px; line-height: 1.25; margin: 0; font-weight: 700; letter-spacing: -.01em; }
+    h2 { font-size: 17px; margin: 28px 0 12px; font-weight: 600; }
+    .subtitle, .muted { color: var(--muted); }
+    .subtitle { margin: 4px 0 0; }
+    .muted { font-size: 13px; }
+    .back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+
+    /* ---- карточки, сетки ---- */
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px;
+      margin-bottom: 16px; box-shadow: var(--shadow); }
+    .card > h2:first-child, .card > h3:first-child { margin-top: 0; }
+    .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); margin-bottom: 20px; }
+    .tile { display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 16px 18px; color: var(--text); box-shadow: var(--shadow); transition: transform .12s, border-color .12s; }
+    .tile:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
+    .tile .count { font-size: 28px; font-weight: 700; line-height: 1; }
+    .tile .label { color: var(--muted); font-weight: 500; }
+    .tile .go { color: var(--accent); font-size: 13px; font-weight: 500; margin-top: auto; }
+
+    /* ---- таблицы ---- */
+    .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow-x: auto;
+      box-shadow: var(--shadow); margin-bottom: 18px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    th { background: var(--surface-2); font-weight: 600; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover td { background: var(--surface-2); }
+    td.num { font-variant-numeric: tabular-nums; }
+    td.actions { text-align: right; white-space: nowrap; }
+    .empty { text-align: center; color: var(--muted); padding: 32px 14px; }
+
+    /* ---- кнопки и бейджи ---- */
+    .button, a.button, button.button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 15px; background: var(--accent);
+      color: var(--accent-text); border: 1px solid transparent; border-radius: 8px; font-weight: 600; font-size: 13.5px; cursor: pointer;
+      font-family: inherit; text-decoration: none; white-space: nowrap; }
+    .button:hover { filter: brightness(1.08); text-decoration: none; }
+    .button.secondary { background: var(--surface); color: var(--text); border-color: var(--line); }
+    .button.secondary:hover { border-color: var(--accent); color: var(--accent); filter: none; }
+    .button.small { padding: 5px 11px; font-size: 12.5px; }
+    .button svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .status-draft { background: var(--warn-soft); color: var(--warn); }
+    .status-submitted { background: var(--accent-soft); color: var(--accent); }
+    .status-approved { background: var(--ok-soft); color: var(--ok); }
+    .badge.neutral { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+
+    /* ---- сообщения ---- */
+    .messages { list-style: none; padding: 0; margin: 0 0 18px; }
+    .messages li { padding: 11px 14px; border-radius: 10px; margin-bottom: 8px; font-weight: 500; border: 1px solid transparent; }
+    .messages .success { background: var(--ok-soft); color: var(--ok); } .messages .error { background: var(--bad-soft); color: var(--bad); }
+    .messages .warning { background: var(--warn-soft); color: var(--warn); } .messages .info { background: var(--accent-soft); color: var(--accent); }
+
+    /* ---- формы ---- */
+    .form-card { max-width: 680px; }
+    .field { margin: 0 0 16px; }
+    label { display: block; font-size: 13px; color: var(--text); margin-bottom: 6px; font-weight: 600; }
+    .field.checkbox label { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+    input, select, textarea { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px;
+      font-family: inherit; background: var(--surface); color: var(--text); transition: border-color .12s, box-shadow .12s; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    input[type=checkbox], input[type=radio] { width: 16px; height: 16px; accent-color: var(--accent); }
+    input[type=file] { padding: 7px; background: var(--surface-2); }
+    .helptext { display: block; color: var(--muted); font-size: 12px; margin-top: 5px; }
+    .errorlist { color: var(--bad); margin: 6px 0 0; padding: 0; list-style: none; font-size: 12.5px; font-weight: 500; }
+    .field.has-error input, .field.has-error select { border-color: var(--bad); }
+    .form-actions { display: flex; gap: 10px; align-items: center; padding-top: 6px; }
+
+    /* ---- мобильная версия ---- */
+    .topbar { display: none; }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .side { position: fixed; inset: 0 auto 0 0; width: 260px; z-index: 20; transform: translateX(-100%); transition: transform .2s; }
+      .layout.open .side { transform: none; box-shadow: 0 0 0 100vmax rgba(0,0,0,.35); }
+      .topbar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--side); color: #fff; position: sticky; top: 0; z-index: 10; }
+      .topbar button { background: none; border: 0; color: #fff; font-size: 22px; cursor: pointer; padding: 0 4px; }
+      main { padding: 20px 16px 48px; }
+    }
+    {% block extra_css %}{% endblock %}
   </style>
 </head>
 <body>
-<header>
-  <div class="bar">
-    <a class="brand" href="/">{% translate "Отчётность кафедры" %}</a>
-    <nav>
-      {% if request.user.is_authenticated %}
-        {% if request.user.teacher_profile %}
-          <a href="{% url 'portal:index' %}">{% translate "Мой кабинет" %}</a>
-          <a href="{% url 'portal:profile' %}">{% translate "Мой профиль" %}</a>
-        {% endif %}
-        {% if request.user.is_staff %}
-          <a href="{% url 'dashboard:index' %}">{% translate "Отчёты кафедры" %}</a>
-          <a href="{% url 'admin:index' %}">{% translate "Админ-панель" %}</a>
-        {% endif %}
-      {% endif %}
-    </nav>
-    <span class="lang">
-      {% get_available_languages as LANGUAGES %}
-      {% for code, name in LANGUAGES %}
-        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}">
-          <input type="hidden" name="language" value="{{ code }}">
-          <button type="submit" class="{% if code == LANG %}active{% endif %}">{% if code == "uz" %}O‘zb{% else %}Рус{% endif %}</button>
-        </form>
-      {% endfor %}
-    </span>
-    {% if request.user.is_authenticated %}
-      <form action="{% url 'logout' %}" method="post">{% csrf_token %}
-        <span class="muted">{{ request.user.get_full_name|default:request.user.username }}</span>
-        <button class="link-button" type="submit">{% translate "Выйти" %}</button>
-      </form>
+{% with url_name=request.resolver_match.url_name ns=request.resolver_match.namespace %}
+<div class="layout{% if not request.user.is_authenticated %} bare{% endif %}" id="layout">
+  {% if request.user.is_authenticated %}
+  <aside class="side">
+    <a class="brand" href="/"><span class="brand-mark">K</span><span>Kafedra hisoboti<small>Reyting va ko‘rsatkichlar</small></span></a>
+
+    {% if request.user.teacher_profile %}
+      <div class="side-label">Shaxsiy kabinet</div>
+      <a class="nav {% if ns == 'portal' and url_name == 'index' %}active{% endif %}" href="{% url 'portal:index' %}">
+        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Мой кабинет</a>
+      <a class="nav {% if ns == 'portal' and url_name == 'profile' %}active{% endif %}" href="{% url 'portal:profile' %}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Мой профиль</a>
+      <a class="nav {% if slug == 'publications' %}active{% endif %}" href="{% url 'portal:list' 'publications' %}">
+        <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Maqolalar</a>
+      <a class="nav {% if slug == 'hindex' %}active{% endif %}" href="{% url 'portal:list' 'hindex' %}">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>H-индекс</a>
     {% endif %}
-  </div>
-</header>
-<main>
-  {% if messages %}
-  <ul class="messages">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>
+
+    {% if request.user.is_staff %}
+      <div class="side-label">Kafedra</div>
+      <a class="nav {% if ns == 'dashboard' and url_name == 'index' %}active{% endif %}" href="{% url 'dashboard:index' %}">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>Отчёты кафедры</a>
+      <a class="nav {% if ns == 'dashboard' and url_name == 'teachers' %}active{% endif %}" href="{% url 'dashboard:teachers' %}">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Jadval</a>
+      <a class="nav" href="{% url 'admin:index' %}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Админ-панель</a>
+    {% endif %}
+
+    <div class="side-user">
+      <span class="avatar">{{ request.user.username|slice:":1" }}</span>
+      <div class="who">
+        <b>{{ request.user.get_full_name|default:request.user.username }}</b>
+        <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button type="submit">Выйти</button></form>
+      </div>
+    </div>
+  </aside>
   {% endif %}
-  {% block content %}{% endblock %}
-</main>
+
+  <div style="min-width:0">
+    {% if request.user.is_authenticated %}
+    <div class="topbar">
+      <button type="button" aria-label="Menyu" onclick="document.getElementById('layout').classList.toggle('open')">☰</button>
+      <b>Kafedra hisoboti</b>
+    </div>
+    {% endif %}
+    <main>
+      {% if messages %}
+      <ul class="messages">{% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}</ul>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% endwith %}
+<script>
+  // закрыть мобильное меню кликом мимо панели
+  document.addEventListener("click", function (e) {
+    var l = document.getElementById("layout");
+    if (l.classList.contains("open") && !e.target.closest(".side") && !e.target.closest(".topbar")) l.classList.remove("open");
+  });
+</script>
 </body>
 </html>

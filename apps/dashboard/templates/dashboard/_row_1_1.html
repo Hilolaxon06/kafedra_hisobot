@@ -1,0 +1,15 @@
+{% with t=row.teacher %}
+<tr>
+  <td>{{ n }}</td>
+  <td><a href="{% url 'admin:staff_teacher_change' t.id %}">{{ t.full_name }}</a></td>
+  <td>{{ t.foreign_university_name }}</td>
+  <td>{% if row.column == "akademik" %}{{ t.diploma_series }}{% endif %}</td>
+  <td>{% if row.column == "akademik" %}{{ t.diploma_number }}{% endif %}</td>
+  <td>{% if row.column == "dsc" %}{{ t.diploma_series }}{% endif %}</td>
+  <td>{% if row.column == "dsc" %}{{ t.diploma_number }}{% endif %}</td>
+  <td>{% if row.column == "phd" %}{{ t.diploma_series }}{% endif %}</td>
+  <td>{% if row.column == "phd" %}{{ t.diploma_number }}{% endif %}</td>
+  <td>{{ t.specialty_name }}</td>
+  <td>{{ row.order|default:"" }}</td>
+</tr>
+{% endwith %}

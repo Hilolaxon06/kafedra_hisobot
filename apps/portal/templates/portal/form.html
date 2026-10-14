@@ -1,15 +1,40 @@
-{% extends "base.html" %}{% load i18n %}
-{% block title %}{{ cfg.title }}{% endblock %}
+{% extends "portal/base.html" %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
-  <p class="muted"><a href="{% url 'portal:list' slug %}">← {{ cfg.title }}</a> · {% translate "Лист" %} {{ cfg.sheet }}</p>
-  <h1>{% if object %}{% translate "Изменить запись" %}{% else %}{% translate "Новая запись" %}{% endif %}</h1>
-  {% if cfg.authors %}
-    <div class="card muted">{% translate "Если у работы несколько авторов, укажите их общее число N (включая авторов из других организаций) и отметьте коллег с кафедры. Каждому автору кафедры засчитывается доля 1/N: при двух авторах — по 0.5, при трёх — по 0.33." %}</div>
+  <a class="back" href="{% if slug %}{% url 'portal:list' slug %}{% else %}{% url 'portal:index' %}{% endif %}">← назад</a>
+  <div class="page-head"><h1>{{ title }}</h1></div>
+
+  <div class="card form-card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<ul class="messages"><li class="error">{{ form.non_field_errors|join:" " }}</li></ul>{% endif %}
+      {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+      {% for field in form.visible_fields %}{% include "portal/_field.html" %}{% endfor %}
+      <div class="form-actions">
+        <button class="button" type="submit">Сохранить</button>
+        <a class="button secondary" href="{% if slug %}{% url 'portal:list' slug %}{% else %}{% url 'portal:index' %}{% endif %}">Отмена</a>
+      </div>
+    </form>
+  </div>
+
+  {% if slug == "publications" %}
+  <script>
+    // Kvartil va «top» faqat Scopus / Web of Science uchun — boshqa maqolalarda yashiramiz
+    (function () {
+      var sel = document.getElementById("id_indexing");
+      if (!sel) return;
+      var ranked = ["scopus", "wos"];
+      var deps = ["id_quartile", "id_citation_tier"].map(function (id) {
+        var el = document.getElementById(id);
+        return el && el.closest(".field");
+      }).filter(Boolean);
+      function sync() {
+        var show = ranked.indexOf(sel.value) !== -1;
+        deps.forEach(function (f) { f.style.display = show ? "" : "none"; });
+      }
+      sel.addEventListener("change", sync);
+      sync();
+    })();
+  </script>
   {% endif %}
-  <form method="post" enctype="multipart/form-data" class="card">
-    {% csrf_token %}
-    {% if form.non_field_errors %}<ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-    {% for field in form %}{% include "portal/_field.html" %}{% endfor %}
-    <button class="button" type="submit">{% translate "Сохранить" %}</button>
-  </form>
 {% endblock %}

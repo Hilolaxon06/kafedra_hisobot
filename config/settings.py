@@ -11,8 +11,7 @@
 - workflow      — отчётные периоды и их статус согласования
 - reports       — все факт-таблицы показателей (публикации, патенты, гранты...)
 - exporter      — генерация исходного .xlsx-отчёта по данным периода
-- dashboard     — панель заведующего: ход заполнения, выгрузка Excel и ZIP с файлами
-- portal        — личный кабинет преподавателя (/kabinet/)
+- dashboard     — минимальный веб-интерфейс поверх admin (список периодов + экспорт)
 """
 
 from pathlib import Path
@@ -22,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="dev-insecure-secret-key")
 DEBUG = config("DEBUG", default=True, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1, 192.168.137.1", cast=Csv())
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -49,7 +48,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -108,14 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Интерфейс двуязычный: узбекский (латиница) и русский, переключатель в шапке.
-# Строки в коде написаны по-русски, узбекский перевод — locale/uz/LC_MESSAGES.
-LANGUAGE_CODE = config("LANGUAGE_CODE", default="uz")
-LANGUAGES = [
-    ("uz", "O‘zbekcha"),
-    ("ru", "Русский"),
-]
-LOCALE_PATHS = [BASE_DIR / "locale"]
+LANGUAGE_CODE = config("LANGUAGE_CODE", default="ru")
 TIME_ZONE = config("TIME_ZONE", default="Asia/Tashkent")
 USE_I18N = True
 USE_TZ = True
@@ -136,7 +127,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
-
-# Подтверждающие документы могут быть сканами по 10–20 МБ
-DATA_UPLOAD_MAX_MEMORY_SIZE = 30 * 1024 * 1024
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024

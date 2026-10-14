@@ -1,16 +1,25 @@
-{% extends "base.html" %}{% load i18n %}
-{% block title %}{% translate "Вход" %}{% endblock %}
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+{% block extra_css %}
+  .login { min-height: calc(100vh - 92px); display: grid; place-items: center; }
+  .login .card { width: 100%; max-width: 400px; padding: 32px 30px; }
+  .login .brand-mark { width: 46px; height: 46px; font-size: 20px; margin-bottom: 18px; border-radius: 12px; }
+  .login .button { width: 100%; justify-content: center; padding: 11px; margin-top: 6px; }
+{% endblock %}
 {% block content %}
-  <div class="card" style="max-width:420px;margin:40px auto">
-    <h1>{% translate "Вход" %}</h1>
-    <p class="muted">{% translate "Логин и пароль выдаёт заведующий кафедрой." %}</p>
-    <form method="post">
-      {% csrf_token %}
-      {% if form.non_field_errors %}<ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-      <div class="field"><label for="id_username">{% translate "Логин" %}</label>{{ form.username }}</div>
-      <div class="field"><label for="id_password">{% translate "Пароль" %}</label>{{ form.password }}</div>
-      <input type="hidden" name="next" value="{{ next }}">
-      <button class="button" type="submit">{% translate "Войти" %}</button>
-    </form>
+  <div class="login">
+    <div class="card">
+      <span class="brand-mark">K</span>
+      <h1>Kafedra hisoboti</h1>
+      <p class="subtitle" style="margin-bottom:22px">Вход в систему. Логин и пароль выдаёт заведующий кафедрой.</p>
+      <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<ul class="messages"><li class="error">{{ form.non_field_errors|join:" " }}</li></ul>{% endif %}
+        <div class="field"><label for="id_username">Логин</label>{{ form.username }}</div>
+        <div class="field"><label for="id_password">Пароль</label>{{ form.password }}</div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="button" type="submit">Войти</button>
+      </form>
+    </div>
   </div>
 {% endblock %}

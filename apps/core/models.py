@@ -1,14 +1,13 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 
 class University(models.Model):
-    name = models.CharField(_("Название (полное)"), max_length=255)
-    short_name = models.CharField(_("Короткое название"), max_length=50, blank=True)
+    name = models.CharField("Название (полное)", max_length=255)
+    short_name = models.CharField("Короткое название", max_length=50, blank=True)
 
     class Meta:
-        verbose_name = _("Университет")
-        verbose_name_plural = _("Университеты")
+        verbose_name = "Университет"
+        verbose_name_plural = "Университеты"
         ordering = ["name"]
 
     def __str__(self):
@@ -18,14 +17,14 @@ class University(models.Model):
 class Faculty(models.Model):
     university = models.ForeignKey(
         University, on_delete=models.PROTECT, related_name="faculties",
-        verbose_name=_("Университет"),
+        verbose_name="Университет",
     )
-    name = models.CharField(_("Название факультета"), max_length=255)
-    short_name = models.CharField(_("Короткое название"), max_length=50, blank=True)
+    name = models.CharField("Название факультета", max_length=255)
+    short_name = models.CharField("Короткое название", max_length=50, blank=True)
 
     class Meta:
-        verbose_name = _("Факультет")
-        verbose_name_plural = _("Факультеты")
+        verbose_name = "Факультет"
+        verbose_name_plural = "Факультеты"
         ordering = ["name"]
         unique_together = [("university", "name")]
 
@@ -42,14 +41,14 @@ class Department(models.Model):
 
     faculty = models.ForeignKey(
         Faculty, on_delete=models.PROTECT, related_name="departments",
-        verbose_name=_("Факультет"),
+        verbose_name="Факультет",
     )
-    name = models.CharField(_("Название кафедры"), max_length=255)
-    short_name = models.CharField(_("Короткое название"), max_length=50, blank=True)
+    name = models.CharField("Название кафедры", max_length=255)
+    short_name = models.CharField("Короткое название", max_length=50, blank=True)
 
     class Meta:
-        verbose_name = _("Кафедра")
-        verbose_name_plural = _("Кафедры")
+        verbose_name = "Кафедра"
+        verbose_name_plural = "Кафедры"
         ordering = ["name"]
         unique_together = [("faculty", "name")]
 

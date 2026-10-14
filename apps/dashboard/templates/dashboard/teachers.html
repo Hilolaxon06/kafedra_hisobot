@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Jadval{% endblock %}
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>Jadval</h1>
+      <p class="subtitle">Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi</p>
+    </div>
+  </div>
+  {% if all_departments|length > 1 %}
+  <form method="get" class="card" style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+    <div style="min-width:280px">
+      <label for="kafedra">Kafedra</label>
+      <select name="kafedra" id="kafedra" onchange="this.form.submit()">
+        <option value="">Barcha kafedralar</option>
+        {% for d in all_departments %}
+          <option value="{{ d.id }}" {% if selected == d.id|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+  {% endif %}
+
+  {% for block in blocks %}
+    <h2 class="sheet-title">{{ block.department.name }} tomonidan Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi</h2>
+    <div class="table-wrap">
+    <table class="sheet">
+      <thead>
+        <tr>
+          <th rowspan="2">T/r</th>
+          <th rowspan="2">Asosiy va ichki o'rindoshlik shtatdagi professor-o‘qituvchilarning F.I.SH (alfavit tartibida to‘liq yoziladi)</th>
+          <th rowspan="2">Ilmiy daraja bergan xorijiy OTM nomi</th>
+          <th colspan="2">Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi akademiklar soni</th>
+          <th colspan="2">Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi DSc (fan doktori) ilmiy darajasi yoki professor unvoniga ega professor-oʻqituvchilar soni</th>
+          <th colspan="2">Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi PhD (fan nomzodi) ilmiy darajasi yoki dotsent unvoniga ega professor-oʻqituvchilar soni</th>
+          <th rowspan="2">Mutaxassisligi nomi</th>
+          <th rowspan="2">Ishga qabul qilinganligi to‘g‘risidagi buyruq raqami va sanasi</th>
+        </tr>
+        <tr>
+          <th>seriyasi</th><th>raqami</th>
+          <th>seriyasi</th><th>raqami</th>
+          <th>seriyasi</th><th>raqami</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in block.main %}{% include "dashboard/_row_1_1.html" with n=forloop.counter %}{% endfor %}
+        {% if not block.main %}<tr><td colspan="11" class="muted">Asosiy shtatda o'qituvchi yo'q.</td></tr>{% endif %}
+        <tr class="section"><td colspan="11">Ichki o'rindosh</td></tr>
+        {% for row in block.ichki %}{% include "dashboard/_row_1_1.html" with n=forloop.counter %}{% endfor %}
+        <tr class="total">
+          <td></td><td>Jami:</td><td></td>
+          <td colspan="2">{{ block.totals.akademik }}</td>
+          <td colspan="2">{{ block.totals.dsc }}</td>
+          <td colspan="2">{{ block.totals.phd }}</td>
+          <td></td><td></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  {% empty %}
+    <div class="card empty">Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan — administratorga murojaat qiling.</div>
+  {% endfor %}
+
+  <style>
+    .sheet-head { text-align: right; font-weight: 600; margin-top: 28px; color: var(--muted); }
+    .sheet-title { text-align: center; font-size: 16px; margin: 6px 0 12px; }
+    .sheet { min-width: 1000px; }
+    .sheet th, .sheet td { border: 1px solid var(--line); font-size: 13px; padding: 8px 10px; }
+    .sheet th { text-align: center; vertical-align: middle; text-transform: none; letter-spacing: 0; color: var(--text); font-size: 12.5px; }
+    .sheet td:nth-child(1) { text-align: center; width: 36px; }
+    .sheet td:nth-child(n+4):nth-child(-n+9) { text-align: center; }
+    .sheet .section td { font-weight: 600; font-style: italic; background: var(--accent-soft); color: var(--accent); }
+    .sheet .total td { font-weight: 700; text-align: center; background: var(--surface-2); }
+    .sheet .total td:nth-child(2) { text-align: left; }
+  </style>
+{% endblock %}

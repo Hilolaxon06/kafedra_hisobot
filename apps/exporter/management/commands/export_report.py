@@ -10,10 +10,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("department_id", type=int)
         parser.add_argument("period_label", type=str)
-        parser.add_argument(
-            "--with-files", action="store_true",
-            help="Дополнительно собрать ZIP-архив всех загруженных файлов по разделам.",
-        )
 
     def handle(self, *args, **options):
         try:
@@ -27,15 +23,13 @@ class Command(BaseCommand):
                 "(создаются в /admin/workflow/reportingperiod/)."
             ) from exc
 
-        path, filled, warnings = export_report(period.department, period)
+        path, filled, skipped = export_report(period.department, period)
         self.stdout.write(self.style.SUCCESS(f"Готово: {path}"))
         self.stdout.write(f"Заполненные листы: {', '.join(filled) or '—'}")
-        for warning in warnings:
-            self.stdout.write(self.style.WARNING(f"  ! {warning}"))
-
-        if options["with_files"]:
-            from apps.exporter.archive import export_archive
-            zip_path, stats = export_archive(period)
-            self.stdout.write(self.style.SUCCESS(
-                f"Архив файлов: {zip_path} (файлов: {stats['files']}, без файла: {stats['missing']})"
-            ))
+        if skipped:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"Листы без автозаполнения (нужно дописать fill_* в apps/exporter/sheets.py): "
+                    f"{', '.join(skipped)}"
+                )
+            )

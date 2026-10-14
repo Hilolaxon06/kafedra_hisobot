@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 
 class EmploymentType(models.Model):
@@ -10,13 +9,13 @@ class EmploymentType(models.Model):
     TASHQI = "tashqi_orindosh"
     SOATBAY = "soatbay"
 
-    code = models.CharField(_("Код"), max_length=30, unique=True)
-    name = models.CharField(_("Название"), max_length=100)
-    sort_order = models.PositiveSmallIntegerField(_("Порядок в отчёте"), default=0)
+    code = models.CharField("Код", max_length=30, unique=True)
+    name = models.CharField("Название", max_length=100)
+    sort_order = models.PositiveSmallIntegerField("Порядок в отчёте", default=0)
 
     class Meta:
-        verbose_name = _("Тип занятости")
-        verbose_name_plural = _("Типы занятости")
+        verbose_name = "Тип занятости"
+        verbose_name_plural = "Типы занятости"
         ordering = ["sort_order"]
 
     def __str__(self):
@@ -24,11 +23,11 @@ class EmploymentType(models.Model):
 
 
 class Position(models.Model):
-    name = models.CharField(_("Название должности"), max_length=100, unique=True)
+    name = models.CharField("Название должности", max_length=100, unique=True)
 
     class Meta:
-        verbose_name = _("Должность (лавозим)")
-        verbose_name_plural = _("Должности (лавозимлар)")
+        verbose_name = "Должность (лавозим)"
+        verbose_name_plural = "Должности (лавозимлар)"
         ordering = ["name"]
 
     def __str__(self):
@@ -38,12 +37,12 @@ class Position(models.Model):
 class AcademicDegree(models.Model):
     """Fan nomzodi / PhD / Fan doktori / DSc."""
 
-    code = models.CharField(_("Код"), max_length=20, unique=True)
-    name = models.CharField(_("Название"), max_length=100)
+    code = models.CharField("Код", max_length=20, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
-        verbose_name = _("Учёная степень")
-        verbose_name_plural = _("Учёные степени")
+        verbose_name = "Учёная степень"
+        verbose_name_plural = "Учёные степени"
         ordering = ["name"]
 
     def __str__(self):
@@ -53,11 +52,11 @@ class AcademicDegree(models.Model):
 class AcademicTitle(models.Model):
     """Dotsent / Professor."""
 
-    name = models.CharField(_("Название"), max_length=100, unique=True)
+    name = models.CharField("Название", max_length=100, unique=True)
 
     class Meta:
-        verbose_name = _("Учёное звание")
-        verbose_name_plural = _("Учёные звания")
+        verbose_name = "Учёное звание"
+        verbose_name_plural = "Учёные звания"
         ordering = ["name"]
 
     def __str__(self):
@@ -66,23 +65,19 @@ class AcademicTitle(models.Model):
 
 class Country(models.Model):
     class Category(models.TextChoices):
-        HIGH_INCOME = "high_income_developed", _("Развитая страна с высоким доходом (список Всемирного банка)")
-        CENTRAL_ASIA = "central_asia", _("Страна Центральной Азии")
-        OTHER = "other", _("Другая страна")
+        HIGH_INCOME = "high_income_developed", "Юқори даромадли ривожланган мамлакат"
+        CENTRAL_ASIA = "central_asia", "Марказий Осиё давлати"
+        OTHER = "other", "Бошқа давлат"
 
-    name = models.CharField(_("Название страны"), max_length=100, unique=True)
+    name = models.CharField("Название страны", max_length=100, unique=True)
     category = models.CharField(
-        _("Категория (для отчётов по мобильности)"), max_length=30,
+        "Категория (для отчётов по мобильности)", max_length=30,
         choices=Category.choices, default=Category.OTHER,
-    )
-    is_home_country = models.BooleanField(
-        _("Страна вуза (Узбекистан)"), default=False,
-        help_text=_("Студенты и преподаватели с этим гражданством не считаются иностранцами."),
     )
 
     class Meta:
-        verbose_name = _("Страна")
-        verbose_name_plural = _("Страны")
+        verbose_name = "Страна"
+        verbose_name_plural = "Страны"
         ordering = ["name"]
 
     def __str__(self):
@@ -98,4 +93,4 @@ class ForeignInstitutionRank(models.TextChoices):
     TOP300 = "TOP300", "TOP-300"
     TOP500 = "TOP500", "TOP-500"
     TOP1000 = "TOP1000", "TOP-1000"
-    OTHER = "other", _("Вне рейтинга TOP-1000")
+    OTHER = "other", "Вне рейтинга TOP-1000"

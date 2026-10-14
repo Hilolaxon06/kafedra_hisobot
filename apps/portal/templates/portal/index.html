@@ -1,48 +1,40 @@
-{% extends "base.html" %}{% load i18n %}
-{% block title %}{% translate "Мой кабинет" %} — {{ teacher.full_name }}{% endblock %}
+{% extends "portal/base.html" %}
+{% block title %}Кабинет — {{ teacher.full_name }}{% endblock %}
 {% block content %}
-  <h1>{{ teacher.full_name }}</h1>
-  <p class="muted">{{ teacher.department.name }}{% if snapshot %} · {{ snapshot.employment_type }}{% if snapshot.position %}, {{ snapshot.position }}{% endif %}{% endif %}</p>
-
-  {% if current %}
-    <div class="card">
-      {% blocktranslate with label=current.period_label date=current.period_date|date:"d.m.Y" %}Открыт отчётный период <b>{{ label }}</b> (на {{ date }}). Внесите свои данные и приложите подтверждающие файлы к каждой записи.{% endblocktranslate %}
+  <div class="page-head">
+    <div>
+      <h1>{{ teacher.full_name }}</h1>
+      <p class="subtitle">{{ teacher.department }}</p>
     </div>
-  {% else %}
-    <div class="card"><span class="badge warn">{% translate "Нет открытого периода" %}</span>
-      {% translate "Сейчас нет периода, открытого для ввода. Можно просматривать прежние записи." %}</div>
-  {% endif %}
-
-  <h2>{% translate "Профиль: дипломы, приказ, гражданство" %} <span class="muted">(1,1 – 1,4)</span></h2>
-  <div class="card">
-    {% if profile_missing %}
-      <span class="badge bad">{% translate "Не заполнено" %}</span> {{ profile_missing|join:", " }}
-    {% else %}
-      <span class="badge ok">{% translate "Заполнено" %}</span>
-    {% endif %}
-    &nbsp; <a class="button secondary" href="{% url 'portal:profile' %}">{% translate "Открыть профиль" %}</a>
+    <a class="button secondary" href="{% url 'portal:profile' %}">Мой профиль</a>
   </div>
 
-  <h2>{% translate "Мои показатели за текущий период" %}</h2>
+  <h2>Мои показатели</h2>
   <div class="grid">
-    {% for s in sections %}
-      <div class="card">
-        <div class="muted">{% translate "Лист" %} {{ s.sheet }}</div>
-        <div style="margin:4px 0 8px"><a href="{% url 'portal:list' s.slug %}"><b>{{ s.title }}</b></a></div>
-        <span class="badge">{% translate "записей" %}: {{ s.count }}</span>
-        {% if s.no_file %}<span class="badge bad">{% translate "без файла" %}: {{ s.no_file }}</span>
-        {% elif s.count %}<span class="badge ok">{% translate "файлы приложены" %}</span>{% endif %}
-      </div>
+    {% for slug, info in counts.items %}
+      <a class="tile" href="{% if slug == 'patents' %}{% url 'portal:patents_list' %}{% else %}{% url 'portal:list' slug %}{% endif %}">
+        <span class="count">{{ info.count }}</span>
+        <span class="label">{{ info.title }}</span>
+        <span class="go">{% if info.count %}Открыть →{% else %}Добавить →{% endif %}</span>
+      </a>
     {% endfor %}
   </div>
 
-  <h2>{% translate "Отчётные периоды кафедры" %}</h2>
-  <div class="table-wrap"><table>
-    <tr><th>{% translate "Период" %}</th><th>{% translate "Дата" %}</th><th>{% translate "Статус" %}</th></tr>
-    {% for p in all_periods %}
-      <tr><td>{{ p.period_label }}</td><td>{{ p.period_date|date:"d.m.Y" }}</td><td>{{ p.get_status_display }}</td></tr>
-    {% empty %}
-      <tr><td colspan="3">{% translate "Периоды ещё не созданы кафедрой." %}</td></tr>
-    {% endfor %}
-  </table></div>
+  <h2>Отчётные периоды кафедры</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Период</th><th>Дата</th><th>Статус</th></tr></thead>
+      <tbody>
+        {% for p in periods %}
+        <tr>
+          <td><b>{{ p.period_label }}</b></td>
+          <td>{{ p.period_date|date:"d.m.Y" }}</td>
+          <td><span class="badge status-{{ p.status }}">{{ p.get_status_display }}</span></td>
+        </tr>
+        {% empty %}
+        <tr><td class="empty" colspan="3">Периоды ещё не созданы кафедрой.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

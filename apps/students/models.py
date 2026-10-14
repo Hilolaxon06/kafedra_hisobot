@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import Department
 from apps.dictionaries.models import Country
@@ -7,27 +6,26 @@ from apps.dictionaries.models import Country
 
 class Student(models.Model):
     class DegreeLevel(models.TextChoices):
-        BACHELOR = "bakalavriat", _("Бакалавриат")
-        MASTER = "magistratura", _("Магистратура")
+        BACHELOR = "bakalavriat", "Бакалавриат"
+        MASTER = "magistratura", "Магистратура"
 
     department = models.ForeignKey(
         Department, on_delete=models.PROTECT, related_name="students",
-        verbose_name=_("Кафедра"),
+        verbose_name="Кафедра",
     )
-    full_name = models.CharField(_("Ф.И.Ш."), max_length=255)
+    full_name = models.CharField("Ф.И.Ш.", max_length=255)
     degree_level = models.CharField(
-        _("Уровень обучения"), max_length=20, choices=DegreeLevel.choices,
+        "Уровень обучения", max_length=20, choices=DegreeLevel.choices,
         default=DegreeLevel.BACHELOR,
     )
     citizenship_country = models.ForeignKey(
-        Country, on_delete=models.PROTECT, related_name="students", null=True, blank=True,
-        verbose_name=_("Гражданство"),
+        Country, on_delete=models.PROTECT, related_name="students",
+        verbose_name="Гражданство",
     )
-    is_active = models.BooleanField(_("Учится сейчас"), default=True)
 
     class Meta:
-        verbose_name = _("Студент")
-        verbose_name_plural = _("Студенты")
+        verbose_name = "Студент"
+        verbose_name_plural = "Студенты"
         ordering = ["full_name"]
 
     def __str__(self):
@@ -43,18 +41,18 @@ class Graduate(models.Model):
 
     student = models.ForeignKey(
         Student, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="graduate_record", verbose_name=_("Запись студента (если есть)"),
+        related_name="graduate_record", verbose_name="Запись студента (если есть)",
     )
     department = models.ForeignKey(
         Department, on_delete=models.PROTECT, related_name="graduates",
-        verbose_name=_("Кафедра"),
+        verbose_name="Кафедра",
     )
-    full_name = models.CharField(_("Ф.И.Ш."), max_length=255)
-    graduation_year = models.PositiveSmallIntegerField(_("Год выпуска"))
+    full_name = models.CharField("Ф.И.Ш.", max_length=255)
+    graduation_year = models.PositiveSmallIntegerField("Год выпуска")
 
     class Meta:
-        verbose_name = _("Выпускник")
-        verbose_name_plural = _("Выпускники")
+        verbose_name = "Выпускник"
+        verbose_name_plural = "Выпускники"
         ordering = ["-graduation_year", "full_name"]
 
     def __str__(self):
