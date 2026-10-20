@@ -1,22 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Отчётные периоды{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Hisobot davrlari" %}{% endblock %}
 {% block content %}
   <div class="page-head">
     <div>
-      <h1>Отчётные периоды</h1>
-      <p class="subtitle">Готовый отчёт по уже накопленным данным. Кадровые данные и справочники —
-        в <a href="{% url 'admin:index' %}">админ-панели</a>; статьи и h-индекс преподаватели вносят сами в личном кабинете.</p>
+      <h1>{% translate "Hisobot davrlari" %}</h1>
+      {% url 'admin:index' as admin_url %}
+      <p class="subtitle">{% blocktranslate trimmed %}
+        To‘plangan ma’lumotlar bo‘yicha tayyor hisobot. Kadrlar ma’lumotlari va ma’lumotnomalar —
+        <a href="{{ admin_url }}">admin-panelda</a>; maqolalar va h-indeksni o‘qituvchilar shaxsiy kabinetda o‘zlari kiritadi.
+      {% endblocktranslate %}</p>
     </div>
   </div>
 
   {% if no_department %}
-    <ul class="messages"><li class="warning">Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan, shuning uchun hisobotlar koʻrinmaydi.
-      Administrator admin-panelda oʻqituvchi kartochkasining «Логин в системе» maydoniga hisobingizni biriktirishi kerak.</li></ul>
+    <ul class="messages"><li class="warning">{% blocktranslate trimmed %}
+      Sizning hisobingiz hech qaysi kafedraga bog‘lanmagan, shuning uchun hisobotlar ko‘rinmaydi.
+      Administrator admin-panelda o‘qituvchi kartochkasining «Tizimdagi login» maydoniga hisobingizni biriktirishi kerak.
+    {% endblocktranslate %}</li></ul>
   {% endif %}
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Кафедра</th><th>Период</th><th>Дата</th><th>Статус</th><th>Maqolalar</th><th></th></tr>
+        <tr><th>{% translate "Kafedra" %}</th><th>{% translate "Davr" %}</th><th>{% translate "Sana" %}</th><th>{% translate "Holati" %}</th><th>{% translate "Maqolalar" %}</th><th></th></tr>
       </thead>
       <tbody>
         {% for period in periods %}
@@ -28,13 +34,13 @@
           <td class="num">{{ period.publications_count }} <span class="muted">· PDF: {{ period.files_count }}</span></td>
           <td class="actions">
             <a class="button small" href="{% url 'dashboard:download_package' period.id %}"
-               title="Reyting jadvali + maqolalar ro‘yxati + har bir o‘qituvchining maqolalari alohida papkada">
-              <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>Hammasi (ZIP)</a>
+               title="{% translate "Reyting jadvali + maqolalar ro‘yxati + har bir o‘qituvchining maqolalari alohida papkada" %}">
+              <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>{% translate "Hammasi (ZIP)" %}</a>
             <a class="button secondary small" href="{% url 'dashboard:download_report' period.id %}">.xlsx</a>
           </td>
         </tr>
         {% empty %}
-        <tr><td class="empty" colspan="6">Периоды ещё не созданы — добавьте в админке (Workflow → Отчётные периоды).</td></tr>
+        <tr><td class="empty" colspan="6">{% translate "Davrlar hali yaratilmagan — admin-panelda qo‘shing (Hisobot davrlari)." %}</td></tr>
         {% endfor %}
       </tbody>
     </table>

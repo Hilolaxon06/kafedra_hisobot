@@ -9,5 +9,8 @@ __pycache__/
 venv/
 *.egg-info/
 .DS_Store
+*.sqlite3.bak*
 .idea/
-*.bak-*
+# alohida git repolar (eski nusxalar) — bu loyihaga kirmaydi
+/kafedra_hisobot/
+/Kafedra_hisoboti_1/

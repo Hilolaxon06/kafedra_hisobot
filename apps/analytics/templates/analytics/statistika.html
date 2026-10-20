@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load analytics_charts %}
+{% block title %}{% translate "Statistika" %}{% endblock %}
+
+{% block extra_css %}
+    :root { --kh-s1: #2a78d6; --kh-s2: #eb6834; --kh-s3: #1baf7a; --kh-s4: #eda100; --kh-s5: #e87ba4; --kh-s6: #008300; }
+    @media (prefers-color-scheme: dark) {
+      :root { --kh-s1: #3987e5; --kh-s2: #d95926; --kh-s3: #199e70; --kh-s4: #c98500; --kh-s5: #d55181; --kh-s6: #008300; }
+    }
+    .rt-filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .rt-filters select { width: auto; min-width: 130px; }
+    table.rt td, table.rt th { white-space: nowrap; }
+    table.rt .n { text-align: right; font-variant-numeric: tabular-nums; }
+    table.rt tr.mine td { background: var(--accent-soft); font-weight: 600; }
+
+    .kh-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 8px; }
+    .kh-kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
+    .kh-kpi b { display: block; font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .kh-kpi span { color: var(--muted); font-size: 12.5px; }
+
+    .kh-note { color: var(--muted); font-size: 12.5px; margin: -6px 0 12px; }
+    .kh-pies { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+    .kh-pie { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
+    .kh-pie figcaption { font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+    .kh-pie-body { display: flex; gap: 14px; align-items: center; }
+    .kh-pie svg { width: 150px; height: 150px; flex: none; }
+    .kh-pie path { stroke: var(--surface); stroke-width: 2; }
+    .kh-pie path:hover, .kh-pie circle:hover { opacity: .85; }
+    .kh-pie-total { font-size: 22px; font-weight: 700; fill: var(--text); }
+    .kh-pie-sub { font-size: 12px; fill: var(--muted); }
+    .kh-pie-empty { color: var(--muted); padding: 40px 0; text-align: center; font-size: 13px; }
+    .kh-legend { list-style: none; margin: 0; padding: 0; flex: 1; min-width: 0; }
+    .kh-legend li { display: grid; grid-template-columns: 12px 1fr auto auto; gap: 8px; align-items: center; font-size: 12.5px; padding: 3px 0; }
+    .kh-legend i { width: 12px; height: 12px; border-radius: 3px; }
+    .kh-legend b { font-variant-numeric: tabular-nums; }
+    .kh-legend em { color: var(--muted); font-style: normal; font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
+    @media (max-width: 767px) { .kh-pie-body { flex-direction: column; align-items: stretch; } .kh-pie svg { align-self: center; } }
+{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>{% translate "Statistika" %}{% if year %} — {% blocktranslate %}{{ year }}-yil{% endblocktranslate %}{% endif %}</h1>
+      <p class="subtitle">{% translate "Ko‘rsatkichlar, diagrammalar va yillar dinamikasi" %}{% if departments|length == 1 %} — {{ departments.0.name }}{% endif %}.</p>
+    </div>
+    {% if years %}
+    <form method="get" class="rt-filters">
+      <select name="yil" onchange="this.form.submit()" aria-label="{% translate "Yil" %}">
+        {% for y in years %}<option value="{{ y }}"{% if y == year %} selected{% endif %}>{% blocktranslate with year=y %}{{ year }}-yil{% endblocktranslate %}</option>{% endfor %}
+      </select>
+      {% if departments|length > 1 %}
+      <select name="kafedra" onchange="this.form.submit()" aria-label="{% translate "Kafedra" %}">
+        <option value="">{% translate "Barcha kafedralar" %}</option>
+        {% for d in departments %}<option value="{{ d.pk }}"{% if d.pk|stringformat:"s" == selected %} selected{% endif %}>{{ d.name }}</option>{% endfor %}
+      </select>
+      {% endif %}
+      <noscript><button class="button secondary" type="submit">{% translate "Ko‘rsatish" %}</button></noscript>
+      <a class="button" href="{% url 'analytics:taqdimot' %}?yil={{ year }}{% if selected %}&kafedra={{ selected }}{% endif %}">{% translate "⬇ Taqdimot (.pptx)" %}</a>
+      <a class="button secondary" href="{% url 'reyting' %}?yil={{ year }}">{% translate "Reyting" %}</a>
+    </form>
+    {% endif %}
+  </div>
+
+  {% if not years %}
+    <div class="card empty">
+      {% if departments %}{% url 'admin:workflow_reportingperiod_add' as add_url %}{% blocktranslate trimmed %}Hali hisobot davrlari yo‘q. Avval <a href="{{ add_url }}">hisobot davrini yarating</a> — statistika shu davrlar bo‘yicha yig‘iladi.{% endblocktranslate %}
+      {% else %}{% translate "Hisobingiz hali kafedraga biriktirilmagan — administratorga murojaat qiling." %}{% endif %}
+    </div>
+  {% else %}
+  <div class="kh-kpis">
+    <div class="kh-kpi"><b>{{ total.staff }}</b><span>{% translate "O‘qituvchilar" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.degree_share }}%</b><span>{% translate "Ilmiy darajalilar ulushi" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.publications|floatformat:"-2" }}</b><span>{% translate "Maqolalar (1/N ulush)" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.scopus_wos|floatformat:"-2" }}</b><span>{% translate "Scopus / WoS" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.hindex }}</b><span>{% translate "H-indeks (jami)" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.patents }}</b><span>{% translate "Patentlar" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.funding|floatformat:"0g" }}</b><span>{% translate "Mablag‘lar, so‘m" %}</span></div>
+    <div class="kh-kpi"><b>{{ total.defenses }}</b><span>{% translate "Himoyalar (PhD / DSc)" %}</span></div>
+  </div>
+
+  <h2>{% blocktranslate %}{{ year }}-yil diagrammalari{% endblocktranslate %}</h2>
+  <p class="kh-note">{% translate "Diagramma ustiga sichqonchani olib borsangiz — aniq son va foiz ko‘rinadi." %}</p>
+  <div class="kh-pies">
+    {% for title, slices, unit in charts %}{% pie_chart title slices unit %}{% endfor %}
+  </div>
+
+  {% if rows|length > 1 %}
+  <h2>{% translate "Kafedralar bo‘yicha" %} — {% blocktranslate %}{{ year }}-yil{% endblocktranslate %}</h2>
+  <div class="table-wrap">
+    <table class="rt">
+      <thead><tr><th>{% translate "Kafedra" %}</th><th class="n">{% translate "O‘qituvchilar" %}</th><th class="n">{% translate "Daraja, %" %}</th><th class="n">{% translate "Maqolalar" %}</th><th class="n">{% translate "Scopus/WoS" %}</th><th class="n">{% translate "H-indeks" %}</th>
+        <th class="n">{% translate "Patentlar" %}</th><th class="n">{% translate "Mablag‘lar" %}</th><th class="n">{% translate "Himoyalar" %}</th><th class="n">{% translate "Mobillik" %}</th><th class="n">{% translate "Ball" %}</th></tr></thead>
+      <tbody>{% for r in rows %}
+        <tr><td>{{ r.department.name }}</td><td class="n">{{ r.staff }}</td><td class="n">{{ r.degree_share }}</td><td class="n">{{ r.publications|floatformat:"-2" }}</td>
+          <td class="n">{{ r.scopus_wos|floatformat:"-2" }}</td><td class="n">{{ r.hindex }}</td><td class="n">{{ r.patents }}</td><td class="n">{{ r.funding|floatformat:"0g" }}</td>
+          <td class="n">{{ r.defenses }}</td><td class="n">{{ r.mobility }}</td><td class="n">{{ r.score }}</td></tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <h2>{% translate "Yillar bo‘yicha hisobot" %}</h2>
+  <div class="table-wrap">
+    <table class="rt">
+      <thead><tr><th>{% translate "Yil" %}</th><th class="n">{% translate "Kafedralar" %}</th><th class="n">{% translate "O‘qituvchilar" %}</th><th class="n">{% translate "Daraja, %" %}</th><th class="n">{% translate "Maqolalar" %}</th><th class="n">{% translate "Scopus/WoS" %}</th>
+        <th class="n">{% translate "Iqtiboslar" %}</th><th class="n">{% translate "H-indeks" %}</th><th class="n">{% translate "Patentlar" %}</th><th class="n">{% translate "Mablag‘lar" %}</th><th class="n">{% translate "Himoyalar" %}</th><th class="n">{% translate "Mobillik" %}</th>
+        <th class="n">{% translate "Bitiruvchilar" %}</th><th></th></tr></thead>
+      <tbody>{% for y, t in series reversed %}
+        <tr{% if y == year %} class="mine"{% endif %}><td><a href="?yil={{ y }}{% if selected %}&kafedra={{ selected }}{% endif %}">{{ y }}</a></td>
+          <td class="n">{{ t.departments_count }}</td><td class="n">{{ t.staff }}</td><td class="n">{{ t.degree_share }}</td><td class="n">{{ t.publications|floatformat:"-2" }}</td>
+          <td class="n">{{ t.scopus_wos|floatformat:"-2" }}</td><td class="n">{{ t.citations }}</td><td class="n">{{ t.hindex }}</td><td class="n">{{ t.patents }}</td>
+          <td class="n">{{ t.funding|floatformat:"0g" }}</td><td class="n">{{ t.defenses }}</td><td class="n">{{ t.mobility }}</td><td class="n">{{ t.graduates }}</td>
+          <td><a href="{% url 'analytics:taqdimot' %}?yil={{ y }}{% if selected %}&kafedra={{ selected }}{% endif %}">{% translate "Taqdimot" %}</a></td></tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}

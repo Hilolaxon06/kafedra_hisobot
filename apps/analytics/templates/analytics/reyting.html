@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Reyting" %}{% endblock %}
+
+{% block extra_css %}
+    .rt-place { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2);
+      border: 1px solid var(--line); font-weight: 700; }
+    .rt-place.p1 { background: #eda100; border-color: #eda100; color: #1b2233; }
+    .rt-place.p2 { background: #c3c7d1; border-color: #c3c7d1; color: #1b2233; }
+    .rt-place.p3 { background: #c98a5a; border-color: #c98a5a; color: #fff; }
+    table.rt td, table.rt th { white-space: nowrap; }
+    table.rt .n { text-align: right; font-variant-numeric: tabular-nums; }
+    table.rt tr.mine td { background: var(--accent-soft); font-weight: 600; }
+    .rt-score { display: flex; gap: 10px; align-items: center; }
+    .rt-bar { height: 8px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); min-width: 120px; flex: 1; }
+    .rt-bar span { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+    .rt-filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .rt-filters select { width: auto; min-width: 130px; }
+    details.card summary { cursor: pointer; font-weight: 600; }
+    details.card ul { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 10px 0 0; }
+{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>{% translate "Kafedralar reytingi" %}{% if year %} — {% blocktranslate %}{{ year }}-yil{% endblocktranslate %}{% endif %}</h1>
+      <p class="subtitle">{% translate "O‘rin 1 o‘qituvchiga to‘g‘ri keladigan ball bo‘yicha — katta va kichik kafedralar adolatli solishtiriladi." %}{% if has_mine %} {% translate "Sizning kafedrangiz ajratib ko‘rsatilgan." %}{% endif %}</p>
+    </div>
+    {% if years %}
+    <form method="get" class="rt-filters">
+      <select name="yil" onchange="this.form.submit()" aria-label="{% translate "Yil" %}">
+        {% for y in years %}<option value="{{ y }}"{% if y == year %} selected{% endif %}>{% blocktranslate with year=y %}{{ year }}-yil{% endblocktranslate %}</option>{% endfor %}
+      </select>
+      <noscript><button class="button secondary" type="submit">{% translate "Ko‘rsatish" %}</button></noscript>
+      <a class="button" href="{% url 'analytics:taqdimot' %}?yil={{ year }}">{% translate "⬇ Taqdimot (.pptx)" %}</a>
+      <a class="button secondary" href="{% url 'analytics:statistika' %}?yil={{ year }}">{% translate "Statistika" %}</a>
+    </form>
+    {% endif %}
+  </div>
+
+  {% if not rows %}
+    <div class="card empty">{% translate "Reyting uchun hali hisobot davrlari yo‘q." %}</div>
+  {% else %}
+  <div class="table-wrap">
+    <table class="rt">
+      <thead><tr><th>{% translate "O‘rin" %}</th><th>{% translate "Kafedra" %}</th><th>{% translate "Fakultet" %}</th><th class="n">{% translate "O‘qit." %}</th><th class="n">{% translate "Daraja, %" %}</th><th class="n">{% translate "Maqolalar" %}</th>
+        <th class="n">{% translate "Scopus/WoS" %}</th><th class="n">{% translate "H-indeks" %}</th><th class="n">{% translate "Patent" %}</th><th class="n">{% translate "Mablag‘, mln" %}</th><th class="n">{% translate "Himoya" %}</th>
+        <th class="n">{% translate "Mobillik" %}</th><th class="n">{% translate "Jami ball" %}</th><th>{% translate "1 o‘qituvchiga" %}</th></tr></thead>
+      <tbody>{% for r in rows %}
+        <tr{% if r.mine %} class="mine"{% endif %}>
+          <td><span class="rt-place{% if r.place <= 3 %} p{{ r.place }}{% endif %}">{{ r.place }}</span></td>
+          <td>{{ r.department.name }}</td><td>{{ r.department.faculty }}</td>
+          <td class="n">{{ r.staff }}</td><td class="n">{{ r.degree_share }}</td><td class="n">{{ r.publications|floatformat:"-2" }}</td>
+          <td class="n">{{ r.scopus_wos|floatformat:"-2" }}</td><td class="n">{{ r.hindex }}</td><td class="n">{{ r.patents }}</td>
+          <td class="n">{{ r.funding_mln|floatformat:"-1" }}</td><td class="n">{{ r.defenses }}</td><td class="n">{{ r.mobility }}</td>
+          <td class="n">{{ r.score }}</td>
+          <td><div class="rt-score"><b>{{ r.score_per_teacher }}</b><div class="rt-bar" title="{% blocktranslate with score=r.score_per_teacher %}{{ score }} ball{% endblocktranslate %}"><span style="width:{{ r.bar }}%"></span></div></div></td>
+        </tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+
+  <h2>{% translate "Ball tarkibi" %}</h2>
+  <div class="table-wrap">
+    <table class="rt">
+      <thead><tr><th>{% translate "Kafedra" %}</th>{% for name in rows.0.score_parts %}<th class="n">{{ name }}</th>{% endfor %}<th class="n">{% translate "Jami" %}</th></tr></thead>
+      <tbody>{% for r in rows %}
+        <tr{% if r.mine %} class="mine"{% endif %}><td>{{ r.department.name }}</td>{% for v in r.score_parts.values %}<td class="n">{{ v }}</td>{% endfor %}<td class="n">{{ r.score }}</td></tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+
+  <details class="card">
+    <summary>{% translate "Ball qanday hisoblanadi?" %}</summary>
+    <ul>
+      <li>{% blocktranslate trimmed with q1=weights.pub_Q1 q2=weights.pub_Q2 q3=weights.pub_Q3 q4=weights.pub_Q4 noq=weights.pub_ranked_noq %}Scopus / WoS maqola: Q1 — {{ q1 }}, Q2 — {{ q2 }}, Q3 — {{ q3 }}, Q4 — {{ q4 }}, kvartilsiz — {{ noq }} ball (hammuallif kafedradoshlar orasida 1/N ulush bilan){% endblocktranslate %}</li>
+      <li>{% blocktranslate trimmed with oak=weights.pub_oak foreign=weights.pub_foreign local=weights.pub_local conf=weights.pub_conference other=weights.pub_other %}OAK jurnali — {{ oak }}, boshqa xorijiy — {{ foreign }}, respublika jurnali — {{ local }}, konferensiya — {{ conf }}, boshqa — {{ other }}{% endblocktranslate %}</li>
+      <li>{% blocktranslate trimmed with h=weights.hindex patent=weights.patent funding=weights.funding_per_mln %}H-indeks birligi — {{ h }}, patent — {{ patent }}, har 1 mln so‘m mablag‘ — {{ funding }}{% endblocktranslate %}</li>
+      <li>{% blocktranslate trimmed with phd=weights.defense_PhD dsc=weights.defense_DSc mobility=weights.mobility %}PhD himoyasi — {{ phd }}, DSc himoyasi — {{ dsc }}, o‘qituvchi mobilligi — {{ mobility }}{% endblocktranslate %}</li>
+      <li>{% blocktranslate trimmed with pct=weights.degree_share_pct %}Jami ball o‘qituvchilar soniga bo‘linadi va unga ilmiy darajalilar ulushining har 1 foizi uchun {{ pct }} ball qo‘shiladi.{% endblocktranslate %}</li>
+    </ul>
+  </details>
+  {% endif %}
+{% endblock %}

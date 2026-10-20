@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.forms import modelform_factory
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
 
 from apps.reports.models import Patent, PatentAuthor
 from apps.staff.models import Teacher
@@ -27,8 +28,7 @@ def _require_teacher(view):
         if teacher is None:
             messages.error(
                 request,
-                "К вашей учётной записи не привязана карточка преподавателя. "
-                "Обратитесь к завкафедрой.",
+                _("Hisobingizga o‘qituvchi kartochkasi biriktirilmagan. Kafedra mudiriga murojaat qiling."),
             )
             return render(request, "portal/no_profile.html", status=403)
         request.teacher = teacher
@@ -45,7 +45,7 @@ def _indicator_counts(teacher):
             "count": cfg["model"].objects.filter(**{cfg["teacher_field"]: teacher}).count(),
         }
     counts["patents"] = {
-        "title": "Патенты",
+        "title": _("Patentlar"),
         "count": Patent.objects.filter(patentauthor__teacher=teacher).distinct().count(),
     }
     return counts
@@ -73,7 +73,7 @@ def profile(request):
         form = TeacherProfileForm(request.POST, request.FILES, instance=teacher)
         if form.is_valid():
             form.save()
-            messages.success(request, "Profil ma’lumotlari saqlandi.")
+            messages.success(request, _("Profil ma’lumotlari saqlandi."))
             return redirect("portal:profile")
     else:
         form = TeacherProfileForm(instance=teacher)
@@ -131,10 +131,10 @@ def generic_form(request, slug, pk=None):
             try:
                 obj.validate_unique()
             except ValidationError:
-                form.add_error("reporting_period", "За этот период запись уже есть — откройте её и измените.")
+                form.add_error("reporting_period", _("Bu davr uchun yozuv allaqachon bor — uni ochib o‘zgartiring."))
             else:
                 obj.save()
-                messages.success(request, "Сохранено.")
+                messages.success(request, _("Saqlandi."))
                 return redirect("portal:list", slug=slug)
     else:
         form = FormClass(instance=instance)
@@ -167,10 +167,10 @@ def patents_form(request, pk=None):
         if form.is_valid():
             patent = form.save()
             PatentAuthor.objects.get_or_create(patent=patent, teacher=teacher)
-            messages.success(request, "Сохранено.")
+            messages.success(request, _("Saqlandi."))
             return redirect("portal:patents_list")
     else:
         form = PatentSelfForm(instance=instance)
         form.fields["reporting_period"].queryset = period_qs
 
-    return render(request, "portal/form.html", {"form": form, "title": "Патент"})
+    return render(request, "portal/form.html", {"form": form, "title": _("Patent")})

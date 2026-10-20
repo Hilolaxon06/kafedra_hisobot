@@ -1,24 +1,39 @@
 {% extends "base.html" %}
-{% block title %}Вход{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Kirish" %}{% endblock %}
 {% block extra_css %}
   .login { min-height: calc(100vh - 92px); display: grid; place-items: center; }
   .login .card { width: 100%; max-width: 400px; padding: 32px 30px; }
   .login .brand-mark { width: 46px; height: 46px; font-size: 20px; margin-bottom: 18px; border-radius: 12px; }
   .login .button { width: 100%; justify-content: center; padding: 11px; margin-top: 6px; }
+  .login-langs { display: flex; justify-content: center; gap: 6px; margin-top: 18px; }
+  .login-langs button { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12.5px;
+    color: var(--muted); cursor: pointer; }
+  .login-langs button:hover { border-color: var(--accent); color: var(--accent); }
+  .login-langs button.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 {% endblock %}
 {% block content %}
   <div class="login">
     <div class="card">
       <span class="brand-mark">K</span>
-      <h1>Kafedra hisoboti</h1>
-      <p class="subtitle" style="margin-bottom:22px">Вход в систему. Логин и пароль выдаёт заведующий кафедрой.</p>
+      <h1 style="margin-bottom:22px">{% translate "Kafedra hisoboti" %}</h1>
       <form method="post">
         {% csrf_token %}
         {% if form.non_field_errors %}<ul class="messages"><li class="error">{{ form.non_field_errors|join:" " }}</li></ul>{% endif %}
-        <div class="field"><label for="id_username">Логин</label>{{ form.username }}</div>
-        <div class="field"><label for="id_password">Пароль</label>{{ form.password }}</div>
+        <div class="field"><label for="id_username">{% translate "Login" %}</label>{{ form.username }}</div>
+        <div class="field"><label for="id_password">{% translate "Parol" %}</label>{{ form.password }}</div>
         <input type="hidden" name="next" value="{{ next }}">
-        <button class="button" type="submit">Войти</button>
+        <button class="button" type="submit">{% translate "Kirish" %}</button>
+      </form>
+
+      {% get_current_language as CURRENT %}
+      {% get_available_languages as LANGS %}
+      <form action="{% url 'set_language' %}" method="post" class="login-langs">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% for code, name in LANGS %}
+          <button type="submit" name="language" value="{{ code }}"{% if code == CURRENT %} class="on"{% endif %}>{{ name }}</button>
+        {% endfor %}
       </form>
     </div>
   </div>

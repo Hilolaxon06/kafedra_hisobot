@@ -1,0 +1,1353 @@
+# Kafedra hisoboti — interfeys tarjimasi. scripts/i18n.py yaratadi.
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nLanguage: uz\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/analytics/stats.py
+msgid "Bitiruvchilar bandligi"
+msgstr "Bitiruvchilar bandligi"
+
+#: apps/analytics/stats.py apps/analytics/templatetags/analytics_charts.py
+msgid "Boshqa"
+msgstr "Boshqa"
+
+#: apps/analytics/stats.py
+msgid "Boshqa xorijiy"
+msgstr "Boshqa xorijiy"
+
+#: apps/analytics/stats.py
+msgid "Chiqish (outbound)"
+msgstr "Chiqish (outbound)"
+
+#: apps/analytics/stats.py
+msgid "DSc / fan doktori"
+msgstr "DSc / fan doktori"
+
+#: apps/analytics/stats.py
+msgid "Darajasiz"
+msgstr "Darajasiz"
+
+#: apps/analytics/stats.py
+msgid "Davlat dasturlari"
+msgstr "Davlat dasturlari"
+
+#: apps/analytics/stats.py
+msgid "Dissertatsiya himoyalari"
+msgstr "Dissertatsiya himoyalari"
+
+#: apps/analytics/stats.py
+msgid "Foydali model"
+msgstr "Foydali model"
+
+#: apps/analytics/stats.py apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html templates/base.html
+msgid "H-indeks"
+msgstr "H-indeks"
+
+#: apps/analytics/stats.py apps/analytics/templates/analytics/statistika.html
+msgid "Himoyalar"
+msgstr "Himoyalar"
+
+#: apps/analytics/stats.py
+msgid "Ilmiy salohiyat (o‘qituvchilar)"
+msgstr "Ilmiy salohiyat (o‘qituvchilar)"
+
+#: apps/analytics/stats.py
+msgid "Ishga joylashgan"
+msgstr "Ishga joylashgan"
+
+#: apps/analytics/stats.py
+msgid "Ixtiro"
+msgstr "Ixtiro"
+
+#: apps/analytics/stats.py apps/portal/registry.py
+msgid "Jalb qilingan mablag‘lar"
+msgstr "Jalb qilingan mablag‘lar"
+
+#: apps/analytics/stats.py
+msgid "Kelish (inbound)"
+msgstr "Kelish (inbound)"
+
+#: apps/analytics/stats.py
+msgid "Konferensiya"
+msgstr "Konferensiya"
+
+#: apps/analytics/stats.py
+msgid "Kvartilsiz"
+msgstr "Kvartilsiz"
+
+#: apps/analytics/stats.py
+msgid "Mablag'lar"
+msgstr "Mablag'lar"
+
+#: apps/analytics/stats.py apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html apps/dashboard/templates/dashboard/index.html templates/base.html
+msgid "Maqolalar"
+msgstr "Maqolalar"
+
+#: apps/analytics/stats.py
+msgid "Maqolalar (nashr turi bo‘yicha)"
+msgstr "Maqolalar (nashr turi bo‘yicha)"
+
+#: apps/analytics/stats.py apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+msgid "Mobillik"
+msgstr "Mobillik"
+
+#: apps/analytics/stats.py
+msgid "O'qishni davom ettiradi / boshqa"
+msgstr "O'qishni davom ettiradi / boshqa"
+
+#: apps/analytics/stats.py
+msgid "OAK jurnallari"
+msgstr "OAK jurnallari"
+
+#: apps/analytics/stats.py
+msgid "O‘qituvchilar mobilligi"
+msgstr "O‘qituvchilar mobilligi"
+
+#: apps/analytics/stats.py apps/analytics/templates/analytics/statistika.html apps/portal/templates/portal/patents_list.html apps/portal/views.py
+msgid "Patentlar"
+msgstr "Patentlar"
+
+#: apps/analytics/stats.py
+msgid "Patentlar turi bo‘yicha"
+msgstr "Patentlar turi bo‘yicha"
+
+#: apps/analytics/stats.py
+msgid "PhD / fan nomzodi"
+msgstr "PhD / fan nomzodi"
+
+#: apps/analytics/stats.py
+msgid "Respublika jurnallari"
+msgstr "Respublika jurnallari"
+
+#: apps/analytics/stats.py
+msgid "Sanoat namunasi"
+msgstr "Sanoat namunasi"
+
+#: apps/analytics/stats.py
+msgid "Scopus / WoS kvartillari"
+msgstr "Scopus / WoS kvartillari"
+
+#: apps/analytics/stats.py
+msgid "Seleksiya yutug'i"
+msgstr "Seleksiya yutug'i"
+
+#: apps/analytics/stats.py
+msgid "Tadbirkor / ta'sischi"
+msgstr "Tadbirkor / ta'sischi"
+
+#: apps/analytics/stats.py
+msgid "Xo'jalik shartnomalari"
+msgstr "Xo'jalik shartnomalari"
+
+#: apps/analytics/stats.py
+msgid "Xorijiy / xalqaro"
+msgstr "Xorijiy / xalqaro"
+
+#: apps/analytics/stats.py
+msgid "so‘m"
+msgstr "so‘m"
+
+#: apps/analytics/templates/analytics/reyting.html
+#, python-format
+msgid "%(score)s ball"
+msgstr "%(score)s ball"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+#, python-format
+msgid "%(year)s-yil"
+msgstr "%(year)s-yil"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "1 o‘qituvchiga"
+msgstr "1 o‘qituvchiga"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Ball qanday hisoblanadi?"
+msgstr "Ball qanday hisoblanadi?"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Ball tarkibi"
+msgstr "Ball tarkibi"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+msgid "Daraja, %"
+msgstr "Daraja, %"
+
+#: apps/analytics/templates/analytics/reyting.html apps/portal/templates/portal/profile.html
+msgid "Fakultet"
+msgstr "Fakultet"
+
+#: apps/analytics/templates/analytics/reyting.html
+#, python-format
+msgid "H-indeks birligi — %(h)s, patent — %(patent)s, har 1 mln so‘m mablag‘ — %(funding)s"
+msgstr "H-indeks birligi — %(h)s, patent — %(patent)s, har 1 mln so‘m mablag‘ — %(funding)s"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Himoya"
+msgstr "Himoya"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Jami"
+msgstr "Jami"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Jami ball"
+msgstr "Jami ball"
+
+#: apps/analytics/templates/analytics/reyting.html
+#, python-format
+msgid "Jami ball o‘qituvchilar soniga bo‘linadi va unga ilmiy darajalilar ulushining har 1 foizi uchun %(pct)s ball qo‘shiladi."
+msgstr "Jami ball o‘qituvchilar soniga bo‘linadi va unga ilmiy darajalilar ulushining har 1 foizi uchun %(pct)s ball qo‘shiladi."
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html apps/dashboard/templates/dashboard/index.html apps/dashboard/templates/dashboard/teachers.html apps/portal/templates/portal/profile.html templates/base.html
+msgid "Kafedra"
+msgstr "Kafedra"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Kafedralar reytingi"
+msgstr "Kafedralar reytingi"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+msgid "Ko‘rsatish"
+msgstr "Ko‘rsatish"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Mablag‘, mln"
+msgstr "Mablag‘, mln"
+
+#: apps/analytics/templates/analytics/reyting.html
+#, python-format
+msgid "OAK jurnali — %(oak)s, boshqa xorijiy — %(foreign)s, respublika jurnali — %(local)s, konferensiya — %(conf)s, boshqa — %(other)s"
+msgstr "OAK jurnali — %(oak)s, boshqa xorijiy — %(foreign)s, respublika jurnali — %(local)s, konferensiya — %(conf)s, boshqa — %(other)s"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "O‘qit."
+msgstr "O‘qit."
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "O‘rin"
+msgstr "O‘rin"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "O‘rin 1 o‘qituvchiga to‘g‘ri keladigan ball bo‘yicha — katta va kichik kafedralar adolatli solishtiriladi."
+msgstr "O‘rin 1 o‘qituvchiga to‘g‘ri keladigan ball bo‘yicha — katta va kichik kafedralar adolatli solishtiriladi."
+
+#: apps/analytics/templates/analytics/reyting.html apps/portal/views.py
+msgid "Patent"
+msgstr "Patent"
+
+#: apps/analytics/templates/analytics/reyting.html
+#, python-format
+msgid "PhD himoyasi — %(phd)s, DSc himoyasi — %(dsc)s, o‘qituvchi mobilligi — %(mobility)s"
+msgstr "PhD himoyasi — %(phd)s, DSc himoyasi — %(dsc)s, o‘qituvchi mobilligi — %(mobility)s"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html templates/base.html
+msgid "Reyting"
+msgstr "Reyting"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Reyting uchun hali hisobot davrlari yo‘q."
+msgstr "Reyting uchun hali hisobot davrlari yo‘q."
+
+#: apps/analytics/templates/analytics/reyting.html
+#, python-format
+msgid "Scopus / WoS maqola: Q1 — %(q1)s, Q2 — %(q2)s, Q3 — %(q3)s, Q4 — %(q4)s, kvartilsiz — %(noq)s ball (hammuallif kafedradoshlar orasida 1/N ulush bilan)"
+msgstr "Scopus / WoS maqola: Q1 — %(q1)s, Q2 — %(q2)s, Q3 — %(q3)s, Q4 — %(q4)s, kvartilsiz — %(noq)s ball (hammuallif kafedradoshlar orasida 1/N ulush bilan)"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+msgid "Scopus/WoS"
+msgstr "Scopus/WoS"
+
+#: apps/analytics/templates/analytics/reyting.html
+msgid "Sizning kafedrangiz ajratib ko‘rsatilgan."
+msgstr "Sizning kafedrangiz ajratib ko‘rsatilgan."
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html templates/base.html
+msgid "Statistika"
+msgstr "Statistika"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+msgid "Yil"
+msgstr "Yil"
+
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+msgid "⬇ Taqdimot (.pptx)"
+msgstr "⬇ Taqdimot (.pptx)"
+
+#: apps/analytics/templates/analytics/statistika.html
+#, python-format
+msgid "%(year)s-yil diagrammalari"
+msgstr "%(year)s-yil diagrammalari"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Ball"
+msgstr "Ball"
+
+#: apps/analytics/templates/analytics/statistika.html apps/dashboard/templates/dashboard/teachers.html
+msgid "Barcha kafedralar"
+msgstr "Barcha kafedralar"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Bitiruvchilar"
+msgstr "Bitiruvchilar"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Diagramma ustiga sichqonchani olib borsangiz — aniq son va foiz ko‘rinadi."
+msgstr "Diagramma ustiga sichqonchani olib borsangiz — aniq son va foiz ko‘rinadi."
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "H-indeks (jami)"
+msgstr "H-indeks (jami)"
+
+#: apps/analytics/templates/analytics/statistika.html
+#, python-format
+msgid "Hali hisobot davrlari yo‘q. Avval <a href=\"%(add_url)s\">hisobot davrini yarating</a> — statistika shu davrlar bo‘yicha yig‘iladi."
+msgstr "Hali hisobot davrlari yo‘q. Avval <a href=\"%(add_url)s\">hisobot davrini yarating</a> — statistika shu davrlar bo‘yicha yig‘iladi."
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Himoyalar (PhD / DSc)"
+msgstr "Himoyalar (PhD / DSc)"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Hisobingiz hali kafedraga biriktirilmagan — administratorga murojaat qiling."
+msgstr "Hisobingiz hali kafedraga biriktirilmagan — administratorga murojaat qiling."
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Ilmiy darajalilar ulushi"
+msgstr "Ilmiy darajalilar ulushi"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Iqtiboslar"
+msgstr "Iqtiboslar"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Kafedralar"
+msgstr "Kafedralar"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Kafedralar bo‘yicha"
+msgstr "Kafedralar bo‘yicha"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Ko‘rsatkichlar, diagrammalar va yillar dinamikasi"
+msgstr "Ko‘rsatkichlar, diagrammalar va yillar dinamikasi"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Mablag‘lar"
+msgstr "Mablag‘lar"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Mablag‘lar, so‘m"
+msgstr "Mablag‘lar, so‘m"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Maqolalar (1/N ulush)"
+msgstr "Maqolalar (1/N ulush)"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "O‘qituvchilar"
+msgstr "O‘qituvchilar"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Scopus / WoS"
+msgstr "Scopus / WoS"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Taqdimot"
+msgstr "Taqdimot"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Yillar bo‘yicha hisobot"
+msgstr "Yillar bo‘yicha hisobot"
+
+#: apps/analytics/templatetags/analytics_charts.py
+msgid "Ma’lumot yo‘q"
+msgstr "Ma’lumot yo‘q"
+
+#: apps/analytics/templatetags/analytics_charts.py
+msgid "jami"
+msgstr "jami"
+
+#: apps/core/templates/core/sozlamalar.html
+msgid "Interfeys tili"
+msgstr "Interfeys tili"
+
+#: apps/core/templates/core/sozlamalar.html
+msgid "Interfeys tili va hisob xavfsizligi."
+msgstr "Interfeys tili va hisob xavfsizligi."
+
+#: apps/core/templates/core/sozlamalar.html
+msgid "Kamida 8 belgi; faqat raqamlardan iborat yoki juda oddiy parol qabul qilinmaydi."
+msgstr "Kamida 8 belgi; faqat raqamlardan iborat yoki juda oddiy parol qabul qilinmaydi."
+
+#: apps/core/templates/core/sozlamalar.html
+msgid "Parolni almashtirish"
+msgstr "Parolni almashtirish"
+
+#: apps/core/templates/core/sozlamalar.html apps/portal/templates/portal/form.html apps/portal/templates/portal/profile.html
+msgid "Saqlash"
+msgstr "Saqlash"
+
+#: apps/core/templates/core/sozlamalar.html templates/base.html
+msgid "Sozlamalar"
+msgstr "Sozlamalar"
+
+#: apps/core/templates/core/sozlamalar.html
+msgid "Tanlangan til shu brauzerda eslab qolinadi."
+msgstr "Tanlangan til shu brauzerda eslab qolinadi."
+
+#: apps/core/views.py
+msgid "Parol almashtirildi."
+msgstr "Parol almashtirildi."
+
+#: apps/dashboard/templates/dashboard/index.html apps/portal/templates/portal/index.html apps/portal/templates/portal/patents_list.html apps/portal/templates/portal/profile.html
+msgid "Davr"
+msgstr "Davr"
+
+#: apps/dashboard/templates/dashboard/index.html
+msgid "Davrlar hali yaratilmagan — admin-panelda qo‘shing (Hisobot davrlari)."
+msgstr "Davrlar hali yaratilmagan — admin-panelda qo‘shing (Hisobot davrlari)."
+
+#: apps/dashboard/templates/dashboard/index.html
+msgid "Hammasi (ZIP)"
+msgstr "Hammasi (ZIP)"
+
+#: apps/dashboard/templates/dashboard/index.html
+msgid "Hisobot davrlari"
+msgstr "Hisobot davrlari"
+
+#: apps/dashboard/templates/dashboard/index.html apps/portal/templates/portal/index.html
+msgid "Holati"
+msgstr "Holati"
+
+#: apps/dashboard/templates/dashboard/index.html
+msgid "Reyting jadvali + maqolalar ro‘yxati + har bir o‘qituvchining maqolalari alohida papkada"
+msgstr "Reyting jadvali + maqolalar ro‘yxati + har bir o‘qituvchining maqolalari alohida papkada"
+
+#: apps/dashboard/templates/dashboard/index.html apps/portal/templates/portal/index.html
+msgid "Sana"
+msgstr "Sana"
+
+#: apps/dashboard/templates/dashboard/index.html
+msgid "Sizning hisobingiz hech qaysi kafedraga bog‘lanmagan, shuning uchun hisobotlar ko‘rinmaydi. Administrator admin-panelda o‘qituvchi kartochkasining «Tizimdagi login» maydoniga hisobingizni biriktirishi kerak."
+msgstr "Sizning hisobingiz hech qaysi kafedraga bog‘lanmagan, shuning uchun hisobotlar ko‘rinmaydi. Administrator admin-panelda o‘qituvchi kartochkasining «Tizimdagi login» maydoniga hisobingizni biriktirishi kerak."
+
+#: apps/dashboard/templates/dashboard/index.html
+#, python-format
+msgid "To‘plangan ma’lumotlar bo‘yicha tayyor hisobot. Kadrlar ma’lumotlari va ma’lumotnomalar — <a href=\"%(admin_url)s\">admin-panelda</a>; maqolalar va h-indeksni o‘qituvchilar shaxsiy kabinetda o‘zlari kiritadi."
+msgstr "To‘plangan ma’lumotlar bo‘yicha tayyor hisobot. Kadrlar ma’lumotlari va ma’lumotnomalar — <a href=\"%(admin_url)s\">admin-panelda</a>; maqolalar va h-indeksni o‘qituvchilar shaxsiy kabinetda o‘zlari kiritadi."
+
+#: apps/dashboard/templates/dashboard/teachers.html
+#, python-format
+msgid "%(department)s tomonidan Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi"
+msgstr "%(department)s tomonidan Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Asosiy shtatda o'qituvchi yo'q."
+msgstr "Asosiy shtatda o'qituvchi yo'q."
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi DSc (fan doktori) ilmiy darajasi yoki professor unvoniga ega professor-oʻqituvchilar soni"
+msgstr "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi DSc (fan doktori) ilmiy darajasi yoki professor unvoniga ega professor-oʻqituvchilar soni"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi PhD (fan nomzodi) ilmiy darajasi yoki dotsent unvoniga ega professor-oʻqituvchilar soni"
+msgstr "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi PhD (fan nomzodi) ilmiy darajasi yoki dotsent unvoniga ega professor-oʻqituvchilar soni"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi akademiklar soni"
+msgstr "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi akademiklar soni"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Asosiy va ichki o'rindoshlik shtatdagi professor-o‘qituvchilarning F.I.SH (alfavit tartibida to‘liq yoziladi)"
+msgstr "Asosiy va ichki o'rindoshlik shtatdagi professor-o‘qituvchilarning F.I.SH (alfavit tartibida to‘liq yoziladi)"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Ichki o'rindosh"
+msgstr "Ichki o'rindosh"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi"
+msgstr "Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Ilmiy daraja bergan xorijiy OTM nomi"
+msgstr "Ilmiy daraja bergan xorijiy OTM nomi"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Ishga qabul qilinganligi to‘g‘risidagi buyruq raqami va sanasi"
+msgstr "Ishga qabul qilinganligi to‘g‘risidagi buyruq raqami va sanasi"
+
+#: apps/dashboard/templates/dashboard/teachers.html templates/base.html
+msgid "Jadval"
+msgstr "Jadval"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Jami:"
+msgstr "Jami:"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Mutaxassisligi nomi"
+msgstr "Mutaxassisligi nomi"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan — administratorga murojaat qiling."
+msgstr "Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan — administratorga murojaat qiling."
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "T/r"
+msgstr "T/r"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "raqami"
+msgstr "raqami"
+
+#: apps/dashboard/templates/dashboard/teachers.html
+msgid "seriyasi"
+msgstr "seriyasi"
+
+#: apps/portal/registry.py
+msgid "H-indeks (Scopus)"
+msgstr "H-indeks (Scopus)"
+
+#: apps/portal/registry.py
+msgid "Maqolalar (Scopus va boshqalar)"
+msgstr "Maqolalar (Scopus va boshqalar)"
+
+#: apps/portal/registry.py
+msgid "Mening rahbarligimdagi himoyalar"
+msgstr "Mening rahbarligimdagi himoyalar"
+
+#: apps/portal/registry.py
+msgid "Xalqaro mobillik"
+msgstr "Xalqaro mobillik"
+
+#: apps/portal/templates/portal/base.html
+msgid "O‘qituvchi kabineti"
+msgstr "O‘qituvchi kabineti"
+
+#: apps/portal/templates/portal/form.html
+msgid "Bekor qilish"
+msgstr "Bekor qilish"
+
+#: apps/portal/templates/portal/form.html
+msgid "← orqaga"
+msgstr "← orqaga"
+
+#: apps/portal/templates/portal/index.html
+msgid "Kabinet"
+msgstr "Kabinet"
+
+#: apps/portal/templates/portal/index.html
+msgid "Kafedra hali hisobot davrlarini yaratmagan."
+msgstr "Kafedra hali hisobot davrlarini yaratmagan."
+
+#: apps/portal/templates/portal/index.html
+msgid "Kafedraning hisobot davrlari"
+msgstr "Kafedraning hisobot davrlari"
+
+#: apps/portal/templates/portal/index.html
+msgid "Mening ko‘rsatkichlarim"
+msgstr "Mening ko‘rsatkichlarim"
+
+#: apps/portal/templates/portal/index.html apps/portal/templates/portal/profile.html templates/base.html
+msgid "Mening profilim"
+msgstr "Mening profilim"
+
+#: apps/portal/templates/portal/index.html
+msgid "Ochish →"
+msgstr "Ochish →"
+
+#: apps/portal/templates/portal/index.html
+msgid "Qo‘shish →"
+msgstr "Qo‘shish →"
+
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html
+msgid "Birinchisini qo‘shish →"
+msgstr "Birinchisini qo‘shish →"
+
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html
+msgid "Hozircha yozuvlar yo‘q."
+msgstr "Hozircha yozuvlar yo‘q."
+
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html
+msgid "O‘zgartirish"
+msgstr "O‘zgartirish"
+
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html
+msgid "Qo‘shish"
+msgstr "Qo‘shish"
+
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html
+msgid "Yozuvlar:"
+msgstr "Yozuvlar:"
+
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html apps/portal/templates/portal/profile.html
+msgid "← kabinetga"
+msgstr "← kabinetga"
+
+#: apps/portal/templates/portal/no_profile.html
+msgid "Agar sizda o‘qituvchi logini bo‘lsa — chiqib, u bilan qayta kiring."
+msgstr "Agar sizda o‘qituvchi logini bo‘lsa — chiqib, u bilan qayta kiring."
+
+#: apps/portal/templates/portal/no_profile.html
+msgid "Chiqish va boshqa login bilan kirish"
+msgstr "Chiqish va boshqa login bilan kirish"
+
+#: apps/portal/templates/portal/no_profile.html templates/base.html
+msgid "Kafedra hisobotlari"
+msgstr "Kafedra hisobotlari"
+
+#: apps/portal/templates/portal/no_profile.html
+msgid "Kirish huquqi yo‘q"
+msgstr "Kirish huquqi yo‘q"
+
+#: apps/portal/templates/portal/no_profile.html
+msgid "O‘qituvchi kartochkasi topilmadi"
+msgstr "O‘qituvchi kartochkasi topilmadi"
+
+#: apps/portal/templates/portal/no_profile.html
+#, python-format
+msgid "Siz <b>%(username)s</b> sifatida kirdingiz, lekin bu login hech qaysi o‘qituvchiga biriktirilmagan. Kafedra mudiriga murojaat qiling — biriktirish admin-panelda, o‘qituvchi kartochkasidagi «Tizimdagi login» maydonida qilinadi."
+msgstr "Siz <b>%(username)s</b> sifatida kirdingiz, lekin bu login hech qaysi o‘qituvchiga biriktirilmagan. Kafedra mudiriga murojaat qiling — biriktirish admin-panelda, o‘qituvchi kartochkasidagi «Tizimdagi login» maydonida qilinadi."
+
+#: apps/portal/templates/portal/patents_list.html
+msgid "Hujjat"
+msgstr "Hujjat"
+
+#: apps/portal/templates/portal/patents_list.html
+msgid "Litsenziya"
+msgstr "Litsenziya"
+
+#: apps/portal/templates/portal/patents_list.html
+msgid "Nomi"
+msgstr "Nomi"
+
+#: apps/portal/templates/portal/patents_list.html
+msgid "Turi"
+msgstr "Turi"
+
+#: apps/portal/templates/portal/patents_list.html
+msgid "ha,yo‘q"
+msgstr "ha,yo‘q"
+
+#: apps/portal/templates/portal/profile.html
+#, python-format
+msgid "%(age)s yosh"
+msgstr "%(age)s yosh"
+
+#: apps/portal/templates/portal/profile.html
+#, python-format
+msgid "%(period)s holatiga"
+msgstr "%(period)s holatiga"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Bandlik turi"
+msgstr "Bandlik turi"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Daraja"
+msgstr "Daraja"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Davrlar bo‘yicha tarix"
+msgstr "Davrlar bo‘yicha tarix"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Diplom nusxasi"
+msgstr "Diplom nusxasi"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Diplom seriyasi va raqami"
+msgstr "Diplom seriyasi va raqami"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Diplom va buyruq ma’lumotlarini tahrirlash"
+msgstr "Diplom va buyruq ma’lumotlarini tahrirlash"
+
+#: apps/portal/templates/portal/profile.html
+msgid "E-mail"
+msgstr "E-mail"
+
+#: apps/portal/templates/portal/profile.html
+msgid "F.I.Sh."
+msgstr "F.I.Sh."
+
+#: apps/portal/templates/portal/profile.html
+msgid "Hozir ishlaydi"
+msgstr "Hozir ishlaydi"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Ilmiy daraja"
+msgstr "Ilmiy daraja"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Ilmiy daraja diplomi"
+msgstr "Ilmiy daraja diplomi"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Ilmiy unvon"
+msgstr "Ilmiy unvon"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Ishga qabul buyrug‘i"
+msgstr "Ishga qabul buyrug‘i"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Ishlamaydi"
+msgstr "Ishlamaydi"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Kafedra hali sizning lavozim/stavka ma’lumotlaringizni kiritmagan. Bu ma’lumotlarni kafedra mudiri admin-panelda kiritadi."
+msgstr "Kafedra hali sizning lavozim/stavka ma’lumotlaringizni kiritmagan. Bu ma’lumotlarni kafedra mudiri admin-panelda kiritadi."
+
+#: apps/portal/templates/portal/profile.html
+msgid "Lavozim"
+msgstr "Lavozim"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Lavozim va ilmiy daraja"
+msgstr "Lavozim va ilmiy daraja"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Lavozim, stavka, bandlik turi va tug‘ilgan sanani kafedra kiritadi — ularda xato bo‘lsa, kafedra mudiriga murojaat qiling."
+msgstr "Lavozim, stavka, bandlik turi va tug‘ilgan sanani kafedra kiritadi — ularda xato bo‘lsa, kafedra mudiriga murojaat qiling."
+
+#: apps/portal/templates/portal/profile.html templates/registration/login.html
+msgid "Login"
+msgstr "Login"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Mutaxassislik"
+msgstr "Mutaxassislik"
+
+#: apps/portal/templates/portal/profile.html
+msgid "OTM"
+msgstr "OTM"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Oxirgi kirish"
+msgstr "Oxirgi kirish"
+
+#: apps/portal/templates/portal/profile.html
+msgid "PDF ni ochish"
+msgstr "PDF ni ochish"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Shaxsiy ma’lumotlar"
+msgstr "Shaxsiy ma’lumotlar"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Stavka"
+msgstr "Stavka"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Tahrirlash"
+msgstr "Tahrirlash"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Tug‘ilgan sana"
+msgstr "Tug‘ilgan sana"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Unvon"
+msgstr "Unvon"
+
+#: apps/portal/templates/portal/profile.html
+msgid "Xorijiy OTM"
+msgstr "Xorijiy OTM"
+
+#: apps/portal/templates/portal/profile.html
+msgid "kiritilmagan"
+msgstr "kiritilmagan"
+
+#: apps/portal/templates/portal/profile.html
+msgid "yuklanmagan"
+msgstr "yuklanmagan"
+
+#: apps/portal/views.py
+msgid "Bu davr uchun yozuv allaqachon bor — uni ochib o‘zgartiring."
+msgstr "Bu davr uchun yozuv allaqachon bor — uni ochib o‘zgartiring."
+
+#: apps/portal/views.py
+msgid "Hisobingizga o‘qituvchi kartochkasi biriktirilmagan. Kafedra mudiriga murojaat qiling."
+msgstr "Hisobingizga o‘qituvchi kartochkasi biriktirilmagan. Kafedra mudiriga murojaat qiling."
+
+#: apps/portal/views.py
+msgid "Profil ma’lumotlari saqlandi."
+msgstr "Profil ma’lumotlari saqlandi."
+
+#: apps/portal/views.py
+msgid "Saqlandi."
+msgstr "Saqlandi."
+
+#: apps/reports/models.py
+msgid "DSc (фан доктори)"
+msgstr "DSc (fan doktori)"
+
+#: apps/reports/models.py
+msgid "H-индекс"
+msgstr "H-indeks"
+
+#: apps/reports/models.py
+msgid "H-индексы"
+msgstr "H-indekslar"
+
+#: apps/reports/models.py
+msgid "ID субъекта"
+msgstr "Subyekt ID"
+
+#: apps/reports/models.py
+msgid "Inbound"
+msgstr "Kelish (inbound)"
+
+#: apps/reports/models.py
+msgid "Outbound"
+msgstr "Chiqish (outbound)"
+
+#: apps/reports/models.py
+msgid "PhD (фалсафа доктори)"
+msgstr "PhD (falsafa doktori)"
+
+#: apps/reports/models.py
+msgid "Scopus, DOI или страница статьи на сайте журнала."
+msgstr "Scopus, DOI yoki jurnal saytidagi maqola sahifasi."
+
+#: apps/reports/models.py
+msgid "Top 1% most cited"
+msgstr "Eng ko‘p iqtibos olgan 1%"
+
+#: apps/reports/models.py
+msgid "Top 10% most cited"
+msgstr "Eng ko‘p iqtibos olgan 10%"
+
+#: apps/reports/models.py
+msgid "Автор"
+msgstr "Muallif"
+
+#: apps/reports/models.py
+msgid "Автор патента"
+msgstr "Patent muallifi"
+
+#: apps/reports/models.py
+msgid "Авторы"
+msgstr "Mualliflar"
+
+#: apps/reports/models.py
+msgid "Авторы патентов"
+msgstr "Patent mualliflari"
+
+#: apps/reports/models.py
+msgid "Академическая мобильность студента"
+msgstr "Talabaning akademik mobilligi"
+
+#: apps/reports/models.py
+msgid "Академическая мобильность студентов"
+msgstr "Talabalarning akademik mobilligi"
+
+#: apps/reports/models.py
+msgid "В свод по квартилям (листы 2,1 и 2,2) попадают только статьи Scopus; остальные статьи хранятся в кабинете и попадают в ZIP-архив кафедры."
+msgstr "Kvartillar bo‘yicha jamlanmaga (2,1 va 2,2-varaqlar) faqat Scopus maqolalari kiradi; qolgan maqolalar kabinetda saqlanadi va kafedraning ZIP arxiviga tushadi."
+
+#: apps/reports/models.py
+msgid "Вне рейтинга"
+msgstr "Reytingdan tashqari"
+
+#: apps/reports/models.py
+msgid "Выпускник"
+msgstr "Bitiruvchi"
+
+#: apps/reports/models.py
+msgid "Где опубликовано (база / тип издания)"
+msgstr "Qayerda chop etilgan (baza / nashr turi)"
+
+#: apps/reports/models.py
+msgid "Год"
+msgstr "Yil"
+
+#: apps/reports/models.py
+msgid "Год публикации"
+msgstr "Nashr yili"
+
+#: apps/reports/models.py
+msgid "Голос за международную репутацию"
+msgstr "Xalqaro obro‘ uchun ovoz"
+
+#: apps/reports/models.py
+msgid "Голоса за международную репутацию"
+msgstr "Xalqaro obro‘ uchun ovozlar"
+
+#: apps/reports/models.py
+msgid "Государственные научные программы"
+msgstr "Davlat ilmiy dasturlari"
+
+#: apps/reports/models.py
+msgid "Договор / квитанция (PDF)"
+msgstr "Shartnoma / kvitansiya (PDF)"
+
+#: apps/reports/models.py
+msgid "Документ, подтверждающий патент (PDF)"
+msgstr "Patentni tasdiqlovchi hujjat (PDF)"
+
+#: apps/reports/models.py
+msgid "Другое (монография, учебник, статья)"
+msgstr "Boshqa (monografiya, darslik, maqola)"
+
+#: apps/reports/models.py
+msgid "Другой зарубежный журнал"
+msgstr "Boshqa xorijiy jurnal"
+
+#: apps/reports/models.py
+msgid "Если статью написали несколько сотрудников кафедры вместе, в своде по квартилям (лист 2,1) каждому засчитывается доля 1/N — как в исходной методике министерства (там встречаются значения вида 0.33, 0.5, 0.66)."
+msgstr "Agar maqolani kafedraning bir nechta xodimi birga yozgan bo‘lsa, kvartillar jamlanmasida (2,1-varaq) har biriga 1/N ulush hisoblanadi — vazirlikning asl metodikasidagidek (u yerda 0.33, 0.5, 0.66 kabi qiymatlar uchraydi)."
+
+#: apps/reports/models.py
+msgid "Есть лицензионный договор"
+msgstr "Litsenziya shartnomasi bor"
+
+#: apps/reports/models.py
+msgid "Журнал из перечня ОАК (OAK ro'yxati)"
+msgstr "OAK ro‘yxatidagi jurnal"
+
+#: apps/reports/models.py
+msgid "Зарубежные / международные организации"
+msgstr "Xorijiy / xalqaro tashkilotlar"
+
+#: apps/reports/models.py
+msgid "Защита диссертации (под руководством)"
+msgstr "Dissertatsiya himoyasi (rahbarlikda)"
+
+#: apps/reports/models.py
+msgid "Защиты диссертаций (под руководством)"
+msgstr "Dissertatsiya himoyalari (rahbarlikda)"
+
+#: apps/reports/models.py
+msgid "ИП / учредитель"
+msgstr "Yakka tadbirkor / ta’sischi"
+
+#: apps/reports/models.py
+msgid "Изобретение"
+msgstr "Ixtiro"
+
+#: apps/reports/models.py
+msgid "Индекс Хирша (Scopus)"
+msgstr "Xirsh indeksi (Scopus)"
+
+#: apps/reports/models.py
+msgid "Источник голосов"
+msgstr "Ovozlar manbai"
+
+#: apps/reports/models.py
+msgid "Источник средств"
+msgstr "Mablag‘ manbai"
+
+#: apps/reports/models.py apps/staff/models.py apps/workflow/models.py
+msgid "Кафедра"
+msgstr "Kafedra"
+
+#: apps/reports/models.py
+msgid "Квартиль"
+msgstr "Kvartil"
+
+#: apps/reports/models.py
+msgid "Код показателя"
+msgstr "Ko‘rsatkich kodi"
+
+#: apps/reports/models.py
+msgid "Международная мобильность ППС"
+msgstr "Professor-o‘qituvchilarning xalqaro mobilligi"
+
+#: apps/reports/models.py
+msgid "Месяц"
+msgstr "Oy"
+
+#: apps/reports/models.py
+msgid "Месяц публикации"
+msgstr "Nashr oyi"
+
+#: apps/reports/models.py
+msgid "Название"
+msgstr "Nomi"
+
+#: apps/reports/models.py
+msgid "Название журнала / сборника"
+msgstr "Jurnal / to‘plam nomi"
+
+#: apps/reports/models.py
+msgid "Название статьи"
+msgstr "Maqola nomi"
+
+#: apps/reports/models.py
+msgid "Направление"
+msgstr "Yo‘nalish"
+
+#: apps/reports/models.py
+msgid "Например: sheet_1_3_top100_degree_count"
+msgstr "Masalan: sheet_1_3_top100_degree_count"
+
+#: apps/reports/models.py
+msgid "Научный руководитель"
+msgstr "Ilmiy rahbar"
+
+#: apps/reports/models.py apps/staff/models.py apps/workflow/models.py
+msgid "Отчётный период"
+msgstr "Hisobot davri"
+
+#: apps/reports/models.py
+msgid "Партнёрский вуз"
+msgstr "Hamkor OTM"
+
+#: apps/reports/models.py
+msgid "Патент / объект интеллектуальной собственности"
+msgstr "Patent / intellektual mulk obyekti"
+
+#: apps/reports/models.py
+msgid "Патенты / объекты интеллектуальной собственности"
+msgstr "Patentlar / intellektual mulk obyektlari"
+
+#: apps/reports/models.py
+msgid "Показатели (гибкие, вне основной схемы)"
+msgstr "Ko‘rsatkichlar (moslashuvchan, asosiy sxemadan tashqari)"
+
+#: apps/reports/models.py
+msgid "Показатель (гибкий, вне основной схемы)"
+msgstr "Ko‘rsatkich (moslashuvchan, asosiy sxemadan tashqari)"
+
+#: apps/reports/models.py
+msgid "Полезная модель"
+msgstr "Foydali model"
+
+#: apps/reports/models.py apps/staff/models.py
+msgid "Преподаватель"
+msgstr "O‘qituvchi"
+
+#: apps/reports/models.py
+msgid "Привлечённые средства"
+msgstr "Jalb qilingan mablag‘lar"
+
+#: apps/reports/models.py
+msgid "Программа обмена"
+msgstr "Almashinuv dasturi"
+
+#: apps/reports/models.py
+msgid "Продолжает учёбу / декрет / инвалидность / самозанят"
+msgstr "O‘qishni davom ettiradi / dekret / nogironlik / o‘zini o‘zi band qilgan"
+
+#: apps/reports/models.py
+msgid "Промышленный образец"
+msgstr "Sanoat namunasi"
+
+#: apps/reports/models.py
+msgid "Публикации (Scopus и другие)"
+msgstr "Maqolalar (Scopus va boshqalar)"
+
+#: apps/reports/models.py
+msgid "Публикация"
+msgstr "Maqola"
+
+#: apps/reports/models.py
+msgid "Путь к подтверждающему документу"
+msgstr "Tasdiqlovchi hujjatga yo‘l"
+
+#: apps/reports/models.py
+msgid "Рейтинг партнёрского вуза"
+msgstr "Hamkor OTM reytingi"
+
+#: apps/reports/models.py
+msgid "Республиканский журнал"
+msgstr "Respublika jurnali"
+
+#: apps/reports/models.py
+msgid "Сборник конференции (тезисы)"
+msgstr "Konferensiya to‘plami (tezislar)"
+
+#: apps/reports/models.py
+msgid "Селекционное достижение"
+msgstr "Seleksiya yutug‘i"
+
+#: apps/reports/models.py
+msgid "Совместная образовательная программа"
+msgstr "Qo‘shma ta’lim dasturi"
+
+#: apps/reports/models.py
+msgid "Сотрудник зарубежного вуза-партнёра"
+msgstr "Xorijiy hamkor OTM xodimi"
+
+#: apps/reports/models.py
+msgid "Средний месячный доход"
+msgstr "O‘rtacha oylik daromad"
+
+#: apps/reports/models.py
+msgid "Средняя зарплата по стране (Госкомстат)"
+msgstr "Mamlakat bo‘yicha o‘rtacha ish haqi (Statistika qo‘mitasi)"
+
+#: apps/reports/models.py
+msgid "Средняя номинальная зарплата по РУз"
+msgstr "O‘zR bo‘yicha o‘rtacha nominal ish haqi"
+
+#: apps/reports/models.py
+msgid "Ссылка на статью"
+msgstr "Maqolaga havola"
+
+#: apps/reports/models.py
+msgid "Статус занятости"
+msgstr "Bandlik holati"
+
+#: apps/reports/models.py
+msgid "Степень"
+msgstr "Daraja"
+
+#: apps/reports/models.py
+msgid "Студент"
+msgstr "Talaba"
+
+#: apps/reports/models.py
+msgid "Сумма"
+msgstr "Summa"
+
+#: apps/reports/models.py
+msgid "Текстовое значение"
+msgstr "Matnli qiymat"
+
+#: apps/reports/models.py
+msgid "Тип"
+msgstr "Turi"
+
+#: apps/reports/models.py
+msgid "Тип программы"
+msgstr "Dastur turi"
+
+#: apps/reports/models.py
+msgid "Тип субъекта"
+msgstr "Subyekt turi"
+
+#: apps/reports/models.py
+msgid "Только для Scopus / Web of Science."
+msgstr "Faqat Scopus / Web of Science uchun."
+
+#: apps/reports/models.py
+msgid "Топ по цитируемости"
+msgstr "Iqtiboslar bo‘yicha top"
+
+#: apps/reports/models.py
+msgid "Трудоустроен (гос. орган / хоз. субъект)"
+msgstr "Ishga joylashgan (davlat organi / xo‘jalik subyekti)"
+
+#: apps/reports/models.py
+msgid "Трудоустройство выпускника"
+msgstr "Bitiruvchining ishga joylashishi"
+
+#: apps/reports/models.py
+msgid "Трудоустройство выпускников"
+msgstr "Bitiruvchilarning ishga joylashishi"
+
+#: apps/reports/models.py
+msgid "Учтён в Scopus"
+msgstr "Scopus’da hisobga olingan"
+
+#: apps/reports/models.py
+msgid "Ф.И.Ш. соискателя"
+msgstr "Izlanuvchining F.I.Sh."
+
+#: apps/reports/models.py
+msgid "Хоздоговорные заказы"
+msgstr "Xo‘jalik shartnomalari bo‘yicha buyurtmalar"
+
+#: apps/reports/models.py
+msgid "Через сколько месяцев трудоустроен"
+msgstr "Necha oyda ishga joylashgan"
+
+#: apps/reports/models.py
+msgid "Число голосов"
+msgstr "Ovozlar soni"
+
+#: apps/reports/models.py
+msgid "Число соавторов-сотрудников этой кафедры"
+msgstr "Shu kafedradagi hammualliflar soni"
+
+#: apps/reports/models.py
+msgid "Число цитирований"
+msgstr "Iqtiboslar soni"
+
+#: apps/reports/models.py
+msgid "Числовое значение"
+msgstr "Sonli qiymat"
+
+#: apps/reports/models.py
+msgid "Эксперт THE / QS / ARWU"
+msgstr "THE / QS / ARWU eksperti"
+
+#: apps/reports/models.py
+msgid "Эксперт нац. агентства по качеству образования"
+msgstr "Ta’lim sifati milliy agentligi eksperti"
+
+#: apps/reports/models.py
+msgid "Электронный PDF статьи"
+msgstr "Maqolaning elektron PDF nusxasi"
+
+#: apps/reports/models.py
+msgid "Язык публикации"
+msgstr "Nashr tili"
+
+#: apps/staff/models.py
+msgid "Дата приказа о приёме"
+msgstr "Ishga qabul buyrug‘i sanasi"
+
+#: apps/staff/models.py
+msgid "Дата рождения"
+msgstr "Tug‘ilgan sana"
+
+#: apps/staff/models.py
+msgid "Должность"
+msgstr "Lavozim"
+
+#: apps/staff/models.py
+msgid "Заводится кафедрой через действие «Создать логин» в списке преподавателей — даёт доступ в личный кабинет, где преподаватель сам вносит свои показатели."
+msgstr "Kafedra o‘qituvchilar ro‘yxatidagi «Login yaratish» amali orqali ochadi — shaxsiy kabinetga kirish imkonini beradi, u yerda o‘qituvchi o‘z ko‘rsatkichlarini o‘zi kiritadi."
+
+#: apps/staff/models.py
+msgid "Зарубежный ОТМ, присвоивший степень"
+msgstr "Darajani bergan xorijiy OTM"
+
+#: apps/staff/models.py
+msgid "Логин в системе"
+msgstr "Tizimdagi login"
+
+#: apps/staff/models.py
+msgid "Номер диплома"
+msgstr "Diplom raqami"
+
+#: apps/staff/models.py
+msgid "Преподаватели"
+msgstr "O‘qituvchilar"
+
+#: apps/staff/models.py
+msgid "Работает сейчас"
+msgstr "Hozir ishlaydi"
+
+#: apps/staff/models.py
+msgid "Серия диплома"
+msgstr "Diplom seriyasi"
+
+#: apps/staff/models.py
+msgid "Скан диплома об учёной степени (PDF)"
+msgstr "Ilmiy daraja diplomining nusxasi (PDF)"
+
+#: apps/staff/models.py
+msgid "Снимки статуса ППС за период"
+msgstr "O‘qituvchilarning davr bo‘yicha holati"
+
+#: apps/staff/models.py
+msgid "Снимок статуса ППС за период"
+msgstr "O‘qituvchining davr bo‘yicha holati"
+
+#: apps/staff/models.py
+msgid "Специальность по диплому об учёной степени"
+msgstr "Ilmiy daraja diplomi bo‘yicha mutaxassislik"
+
+#: apps/staff/models.py
+msgid "Ставка"
+msgstr "Stavka"
+
+#: apps/staff/models.py
+msgid "Тип занятости"
+msgstr "Bandlik turi"
+
+#: apps/staff/models.py
+msgid "Учёная степень на момент отчёта"
+msgstr "Hisobot paytidagi ilmiy daraja"
+
+#: apps/staff/models.py
+msgid "Учёное звание на момент отчёта"
+msgstr "Hisobot paytidagi ilmiy unvon"
+
+#: apps/staff/models.py
+msgid "Ф.И.Ш. (полностью)"
+msgstr "F.I.Sh. (to‘liq)"
+
+#: apps/staff/models.py
+msgid "№ приказа о приёме"
+msgstr "Ishga qabul buyrug‘i №"
+
+#: apps/workflow/models.py
+msgid "Дата, на которую формируется отчёт (holatiga)"
+msgstr "Hisobot tuziladigan sana (holatiga)"
+
+#: apps/workflow/models.py
+msgid "Метка периода"
+msgstr "Davr belgisi"
+
+#: apps/workflow/models.py
+msgid "Например: 2026-mart"
+msgstr "Masalan: 2026-mart"
+
+#: apps/workflow/models.py
+msgid "Отправил на согласование"
+msgstr "Kelishuvga yuborgan"
+
+#: apps/workflow/models.py
+msgid "Отправлено"
+msgstr "Yuborilgan"
+
+#: apps/workflow/models.py
+msgid "Отправлено на согласование"
+msgstr "Kelishuvga yuborilgan"
+
+#: apps/workflow/models.py
+msgid "Отчётные периоды"
+msgstr "Hisobot davrlari"
+
+#: apps/workflow/models.py
+msgid "Статус"
+msgstr "Holati"
+
+#: apps/workflow/models.py
+msgid "Утвердил"
+msgstr "Tasdiqlagan"
+
+#: apps/workflow/models.py
+msgid "Утверждено"
+msgstr "Tasdiqlangan"
+
+#: apps/workflow/models.py
+msgid "Черновик (кафедра вводит данные)"
+msgstr "Qoralama (kafedra ma’lumot kiritmoqda)"
+
+#: templates/base.html
+msgid "Admin-panel"
+msgstr "Admin-panel"
+
+#: templates/base.html
+msgid "Chiqish"
+msgstr "Chiqish"
+
+#: templates/base.html
+msgid "Hisob"
+msgstr "Hisob"
+
+#: templates/base.html templates/registration/login.html
+msgid "Kafedra hisoboti"
+msgstr "Kafedra hisoboti"
+
+#: templates/base.html
+msgid "Mening kabinetim"
+msgstr "Mening kabinetim"
+
+#: templates/base.html
+msgid "Menyu"
+msgstr "Menyu"
+
+#: templates/base.html
+msgid "Reyting va ko‘rsatkichlar"
+msgstr "Reyting va ko‘rsatkichlar"
+
+#: templates/base.html
+msgid "Shaxsiy kabinet"
+msgstr "Shaxsiy kabinet"
+
+#: templates/registration/login.html
+msgid "Kirish"
+msgstr "Kirish"
+
+#: templates/registration/login.html
+msgid "Parol"
+msgstr "Parol"

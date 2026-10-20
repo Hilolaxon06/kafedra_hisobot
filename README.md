@@ -199,3 +199,16 @@ MySQL, `mysqlclient` уже в `requirements.txt`.
   позволяет, но кабинет не проверяет, не задвоил ли кто-то тот же патент
   второй записью; на практике для кафедры в 10–20 человек это не проблема,
   но стоит иметь в виду при росте.
+
+## Interfeys tillari (o‘zbek / русский / English)
+
+Til **Sozlamalar** (`/sozlamalar/`) sahifasida yoki login sahifasining pastida
+tanlanadi va brauzerda (cookie) eslab qolinadi. Asosiy til — `LANGUAGE_CODE=uz`.
+
+Tarjimalar — `locale/{uz,ru,en}/LC_MESSAGES/django.po`. Kodda msgid sayt
+shablonlarida o‘zbekcha, modellarda (`verbose_name`, `choices`) — ruscha,
+shuning uchun **har uchala** katalogda har bir satr to‘ldirilishi kerak.
+GNU gettext kerak emas:
+
+    python scripts/i18n.py            # yangi satrlarni .po ga qo‘shish (bo‘shlarini ko‘rsatadi)
+    python scripts/i18n.py --compile  # tarjimadan keyin .mo ni yig‘ish

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Sozlamalar" %}{% endblock %}
+
+{% block extra_css %}
+    .set-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; }
+    .set-grid .card { margin-bottom: 0; }
+    .card h3 { font-size: 15px; margin: 0 0 4px; }
+    .card h3 + .muted { margin: 0 0 16px; }
+    .lang-list { display: grid; gap: 8px; margin-bottom: 16px; }
+    .lang-opt { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px;
+      cursor: pointer; font-weight: 500; margin: 0; }
+    .lang-opt:hover { border-color: var(--accent); }
+    .lang-opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+    .lang-opt .code { margin-left: auto; color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 600; }
+{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>{% translate "Sozlamalar" %}</h1>
+      <p class="subtitle">{% translate "Interfeys tili va hisob xavfsizligi." %}</p>
+    </div>
+  </div>
+
+  <div class="set-grid">
+    <div class="card">
+      <h3>{% translate "Interfeys tili" %}</h3>
+      <p class="muted">{% translate "Tanlangan til shu brauzerda eslab qolinadi." %}</p>
+      {% get_current_language as CURRENT %}
+      {% get_available_languages as LANGS %}
+      <form action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{% url 'sozlamalar' %}">
+        <div class="lang-list">
+          {% for code, name in LANGS %}
+          <label class="lang-opt">
+            <input type="radio" name="language" value="{{ code }}"{% if code == CURRENT %} checked{% endif %}>
+            {{ name }}<span class="code">{{ code }}</span>
+          </label>
+          {% endfor %}
+        </div>
+        <button class="button" type="submit">{% translate "Saqlash" %}</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>{% translate "Parolni almashtirish" %}</h3>
+      <p class="muted">{% translate "Kamida 8 belgi; faqat raqamlardan iborat yoki juda oddiy parol qabul qilinmaydi." %}</p>
+      <form method="post">
+        {% csrf_token %}
+        {% if password_form.non_field_errors %}<ul class="messages"><li class="error">{{ password_form.non_field_errors|join:" " }}</li></ul>{% endif %}
+        {% for field in password_form.visible_fields %}{% include "portal/_field.html" %}{% endfor %}
+        <div class="form-actions">
+          <button class="button" type="submit">{% translate "Parolni almashtirish" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

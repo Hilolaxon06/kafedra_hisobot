@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class ReportingPeriod(models.Model):
@@ -12,38 +13,38 @@ class ReportingPeriod(models.Model):
     """
 
     class Status(models.TextChoices):
-        DRAFT = "draft", "Черновик (кафедра вводит данные)"
-        SUBMITTED = "submitted", "Отправлено на согласование"
-        APPROVED = "approved", "Утверждено"
+        DRAFT = "draft", _("Черновик (кафедра вводит данные)")
+        SUBMITTED = "submitted", _("Отправлено на согласование")
+        APPROVED = "approved", _("Утверждено")
 
     department = models.ForeignKey(
         "core.Department", on_delete=models.PROTECT, related_name="reporting_periods",
-        verbose_name="Кафедра",
+        verbose_name=_("Кафедра"),
     )
     period_label = models.CharField(
-        "Метка периода", max_length=50, help_text="Например: 2026-mart",
+        _("Метка периода"), max_length=50, help_text=_("Например: 2026-mart"),
     )
-    period_date = models.DateField("Дата, на которую формируется отчёт (holatiga)")
+    period_date = models.DateField(_("Дата, на которую формируется отчёт (holatiga)"))
     status = models.CharField(
-        "Статус", max_length=20, choices=Status.choices, default=Status.DRAFT,
+        _("Статус"), max_length=20, choices=Status.choices, default=Status.DRAFT,
     )
 
     submitted_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="submitted_periods", verbose_name="Отправил на согласование",
+        related_name="submitted_periods", verbose_name=_("Отправил на согласование"),
     )
-    submitted_at = models.DateTimeField("Отправлено", null=True, blank=True)
+    submitted_at = models.DateTimeField(_("Отправлено"), null=True, blank=True)
     approved_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="approved_periods", verbose_name="Утвердил",
+        related_name="approved_periods", verbose_name=_("Утвердил"),
     )
-    approved_at = models.DateTimeField("Утверждено", null=True, blank=True)
+    approved_at = models.DateTimeField(_("Утверждено"), null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Отчётный период"
-        verbose_name_plural = "Отчётные периоды"
+        verbose_name = _("Отчётный период")
+        verbose_name_plural = _("Отчётные периоды")
         unique_together = [("department", "period_label")]
         ordering = ["-period_date"]
 

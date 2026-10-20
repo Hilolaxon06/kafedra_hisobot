@@ -12,13 +12,15 @@ Patent сюда не входит — у него авторство M2M (чер
 generic_list/generic_form в views.py работают с любым слагом из REGISTRY.
 """
 
+from django.utils.translation import gettext_lazy as _
+
 from apps.reports.models import Publication, Funding, TeacherMobility, PostgradDefense, TeacherHIndex
 
 REGISTRY = {
     "publications": {
         "model": Publication,
         "teacher_field": "teacher",
-        "title": "Maqolalar (Scopus va boshqalar)",
+        "title": _("Maqolalar (Scopus va boshqalar)"),
         "fields": [
             "reporting_period", "indexing", "journal_name", "publish_year", "publish_month",
             "article_title", "language", "scopus_url", "quartile", "citation_tier",
@@ -29,28 +31,28 @@ REGISTRY = {
     "hindex": {
         "model": TeacherHIndex,
         "teacher_field": "teacher",
-        "title": "H-индекс (Scopus)",
+        "title": _("H-indeks (Scopus)"),
         "fields": ["reporting_period", "h_index"],
         "list_columns": ["reporting_period", "h_index"],
     },
     "fundings": {
         "model": Funding,
         "teacher_field": "teacher",
-        "title": "Привлечённые средства",
+        "title": _("Jalb qilingan mablag‘lar"),
         "fields": ["reporting_period", "source_type", "amount", "document_file"],
         "list_columns": ["reporting_period", "source_type", "amount"],
     },
     "mobility": {
         "model": TeacherMobility,
         "teacher_field": "teacher",
-        "title": "Международная мобильность",
+        "title": _("Xalqaro mobillik"),
         "fields": ["reporting_period", "direction", "partner_institution_name"],
         "list_columns": ["reporting_period", "direction", "partner_institution_name"],
     },
     "defenses": {
         "model": PostgradDefense,
         "teacher_field": "advisor_teacher",
-        "title": "Защиты под моим руководством",
+        "title": _("Mening rahbarligimdagi himoyalar"),
         "fields": ["reporting_period", "degree_type", "defended_full_name"],
         "list_columns": ["reporting_period", "degree_type", "defended_full_name"],
     },

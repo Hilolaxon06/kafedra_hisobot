@@ -1,18 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Jadval{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Jadval" %}{% endblock %}
 {% block content %}
   <div class="page-head">
     <div>
-      <h1>Jadval</h1>
-      <p class="subtitle">Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi</p>
+      <h1>{% translate "Jadval" %}</h1>
+      <p class="subtitle">{% translate "Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi" %}</p>
     </div>
   </div>
   {% if all_departments|length > 1 %}
   <form method="get" class="card" style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
     <div style="min-width:280px">
-      <label for="kafedra">Kafedra</label>
+      <label for="kafedra">{% translate "Kafedra" %}</label>
       <select name="kafedra" id="kafedra" onchange="this.form.submit()">
-        <option value="">Barcha kafedralar</option>
+        <option value="">{% translate "Barcha kafedralar" %}</option>
         {% for d in all_departments %}
           <option value="{{ d.id }}" {% if selected == d.id|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
         {% endfor %}
@@ -22,33 +23,33 @@
   {% endif %}
 
   {% for block in blocks %}
-    <h2 class="sheet-title">{{ block.department.name }} tomonidan Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi</h2>
+    <h2 class="sheet-title">{% blocktranslate with department=block.department.name %}{{ department }} tomonidan Ilmiy daraja (unvon)ga ega professor-oʻqituvchilar ulushi{% endblocktranslate %}</h2>
     <div class="table-wrap">
     <table class="sheet">
       <thead>
         <tr>
-          <th rowspan="2">T/r</th>
-          <th rowspan="2">Asosiy va ichki o'rindoshlik shtatdagi professor-o‘qituvchilarning F.I.SH (alfavit tartibida to‘liq yoziladi)</th>
-          <th rowspan="2">Ilmiy daraja bergan xorijiy OTM nomi</th>
-          <th colspan="2">Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi akademiklar soni</th>
-          <th colspan="2">Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi DSc (fan doktori) ilmiy darajasi yoki professor unvoniga ega professor-oʻqituvchilar soni</th>
-          <th colspan="2">Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi PhD (fan nomzodi) ilmiy darajasi yoki dotsent unvoniga ega professor-oʻqituvchilar soni</th>
-          <th rowspan="2">Mutaxassisligi nomi</th>
-          <th rowspan="2">Ishga qabul qilinganligi to‘g‘risidagi buyruq raqami va sanasi</th>
+          <th rowspan="2">{% translate "T/r" %}</th>
+          <th rowspan="2">{% translate "Asosiy va ichki o'rindoshlik shtatdagi professor-o‘qituvchilarning F.I.SH (alfavit tartibida to‘liq yoziladi)" %}</th>
+          <th rowspan="2">{% translate "Ilmiy daraja bergan xorijiy OTM nomi" %}</th>
+          <th colspan="2">{% translate "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi akademiklar soni" %}</th>
+          <th colspan="2">{% translate "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi DSc (fan doktori) ilmiy darajasi yoki professor unvoniga ega professor-oʻqituvchilar soni" %}</th>
+          <th colspan="2">{% translate "Asosiy shtatda va ichki oʻrindosh sifatida mehnat faoliyatini olib boruvchi PhD (fan nomzodi) ilmiy darajasi yoki dotsent unvoniga ega professor-oʻqituvchilar soni" %}</th>
+          <th rowspan="2">{% translate "Mutaxassisligi nomi" %}</th>
+          <th rowspan="2">{% translate "Ishga qabul qilinganligi to‘g‘risidagi buyruq raqami va sanasi" %}</th>
         </tr>
         <tr>
-          <th>seriyasi</th><th>raqami</th>
-          <th>seriyasi</th><th>raqami</th>
-          <th>seriyasi</th><th>raqami</th>
+          <th>{% translate "seriyasi" %}</th><th>{% translate "raqami" %}</th>
+          <th>{% translate "seriyasi" %}</th><th>{% translate "raqami" %}</th>
+          <th>{% translate "seriyasi" %}</th><th>{% translate "raqami" %}</th>
         </tr>
       </thead>
       <tbody>
         {% for row in block.main %}{% include "dashboard/_row_1_1.html" with n=forloop.counter %}{% endfor %}
-        {% if not block.main %}<tr><td colspan="11" class="muted">Asosiy shtatda o'qituvchi yo'q.</td></tr>{% endif %}
-        <tr class="section"><td colspan="11">Ichki o'rindosh</td></tr>
+        {% if not block.main %}<tr><td colspan="11" class="muted">{% translate "Asosiy shtatda o'qituvchi yo'q." %}</td></tr>{% endif %}
+        <tr class="section"><td colspan="11">{% translate "Ichki o'rindosh" %}</td></tr>
         {% for row in block.ichki %}{% include "dashboard/_row_1_1.html" with n=forloop.counter %}{% endfor %}
         <tr class="total">
-          <td></td><td>Jami:</td><td></td>
+          <td></td><td>{% translate "Jami:" %}</td><td></td>
           <td colspan="2">{{ block.totals.akademik }}</td>
           <td colspan="2">{{ block.totals.dsc }}</td>
           <td colspan="2">{{ block.totals.phd }}</td>
@@ -58,7 +59,7 @@
     </table>
     </div>
   {% empty %}
-    <div class="card empty">Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan — administratorga murojaat qiling.</div>
+    <div class="card empty">{% translate "Sizning hisobingiz hech qaysi kafedraga bogʻlanmagan — administratorga murojaat qiling." %}</div>
   {% endfor %}
 
   <style>

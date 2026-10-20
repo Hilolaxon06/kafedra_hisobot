@@ -64,6 +64,8 @@
     <div class="kh-actions">
       <a class="kh-solid" href="{% url 'dashboard:index' %}">⬇ Hisobotni yuklab olish</a>
       <a href="{% url 'dashboard:teachers' %}">O‘qituvchilar jadvali</a>
+      <a href="{% url 'analytics:statistika' %}">📊 Statistika</a>
+      <a href="{% url 'analytics:taqdimot' %}">⬇ Yillik taqdimot</a>
     </div>
   </div>
 
@@ -102,6 +104,13 @@
   <div class="kh-empty">Sizga hali hech qanday bo‘lim uchun huquq berilmagan. Administrator guruhingizga kerakli huquqlarni berishi kerak.</div>
   {% endfor %}
 {% else %}
+  <div class="module" style="margin-bottom:16px">
+    <h2>Statistika va hisobotlar</h2>
+    <p style="padding:10px 12px;margin:0;display:flex;gap:16px;flex-wrap:wrap">
+      <a href="{% url 'analytics:statistika' %}"><b>📊 Statistika (yillar bo‘yicha)</b></a>
+      <a href="{% url 'analytics:taqdimot' %}"><b>⬇ Yillik taqdimot (.pptx)</b></a>
+    </p>
+  </div>
   {{ block.super }}
 {% endif %}
 {% endblock %}

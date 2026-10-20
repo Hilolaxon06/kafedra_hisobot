@@ -1,29 +1,30 @@
 {% extends "portal/base.html" %}
-{% block title %}Кабинет — {{ teacher.full_name }}{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Kabinet" %} — {{ teacher.full_name }}{% endblock %}
 {% block content %}
   <div class="page-head">
     <div>
       <h1>{{ teacher.full_name }}</h1>
       <p class="subtitle">{{ teacher.department }}</p>
     </div>
-    <a class="button secondary" href="{% url 'portal:profile' %}">Мой профиль</a>
+    <a class="button secondary" href="{% url 'portal:profile' %}">{% translate "Mening profilim" %}</a>
   </div>
 
-  <h2>Мои показатели</h2>
+  <h2>{% translate "Mening ko‘rsatkichlarim" %}</h2>
   <div class="grid">
     {% for slug, info in counts.items %}
       <a class="tile" href="{% if slug == 'patents' %}{% url 'portal:patents_list' %}{% else %}{% url 'portal:list' slug %}{% endif %}">
         <span class="count">{{ info.count }}</span>
         <span class="label">{{ info.title }}</span>
-        <span class="go">{% if info.count %}Открыть →{% else %}Добавить →{% endif %}</span>
+        <span class="go">{% if info.count %}{% translate "Ochish →" %}{% else %}{% translate "Qo‘shish →" %}{% endif %}</span>
       </a>
     {% endfor %}
   </div>
 
-  <h2>Отчётные периоды кафедры</h2>
+  <h2>{% translate "Kafedraning hisobot davrlari" %}</h2>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Период</th><th>Дата</th><th>Статус</th></tr></thead>
+      <thead><tr><th>{% translate "Davr" %}</th><th>{% translate "Sana" %}</th><th>{% translate "Holati" %}</th></tr></thead>
       <tbody>
         {% for p in periods %}
         <tr>
@@ -32,7 +33,7 @@
           <td><span class="badge status-{{ p.status }}">{{ p.get_status_display }}</span></td>
         </tr>
         {% empty %}
-        <tr><td class="empty" colspan="3">Периоды ещё не созданы кафедрой.</td></tr>
+        <tr><td class="empty" colspan="3">{% translate "Kafedra hali hisobot davrlarini yaratmagan." %}</td></tr>
         {% endfor %}
       </tbody>
     </table>

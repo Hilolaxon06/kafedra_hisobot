@@ -1,15 +1,15 @@
 {% extends "portal/base.html" %}
-{% load portal_extras %}
+{% load i18n portal_extras %}
 {% block title %}{{ cfg.title }}{% endblock %}
 {% block content %}
-  <a class="back" href="{% url 'portal:index' %}">← в кабинет</a>
+  <a class="back" href="{% url 'portal:index' %}">{% translate "← kabinetga" %}</a>
   <div class="page-head">
     <div>
       <h1>{{ cfg.title }}</h1>
-      <p class="subtitle">Записей: {{ objects|length }}</p>
+      <p class="subtitle">{% translate "Yozuvlar:" %} {{ objects|length }}</p>
     </div>
     <a class="button" href="{% url 'portal:add' slug %}">
-      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить</a>
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>{% translate "Qo‘shish" %}</a>
   </div>
 
   <div class="table-wrap">
@@ -24,11 +24,11 @@
         {% for obj in objects %}
         <tr>
           {% for col in cfg.list_columns %}<td>{{ obj|display:col }}</td>{% endfor %}
-          <td class="actions"><a class="button secondary small" href="{% url 'portal:edit' slug obj.pk %}">Изменить</a></td>
+          <td class="actions"><a class="button secondary small" href="{% url 'portal:edit' slug obj.pk %}">{% translate "O‘zgartirish" %}</a></td>
         </tr>
         {% empty %}
         <tr><td class="empty" colspan="{{ cfg.list_columns|length|add:1 }}">
-          Записей пока нет. <a href="{% url 'portal:add' slug %}">Добавить первую →</a></td></tr>
+          {% translate "Hozircha yozuvlar yo‘q." %} <a href="{% url 'portal:add' slug %}">{% translate "Birinchisini qo‘shish →" %}</a></td></tr>
         {% endfor %}
       </tbody>
     </table>

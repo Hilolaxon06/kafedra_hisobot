@@ -1,18 +1,21 @@
 {% extends "portal/base.html" %}
-{% block title %}Нет доступа{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Kirish huquqi yo‘q" %}{% endblock %}
 {% block content %}
   <div class="card" style="max-width:620px">
-    <h1 style="margin-bottom:10px">Карточка преподавателя не найдена</h1>
-    <p>Вы вошли как <b>{{ request.user.username }}</b>, но этот логин не привязан ни к одному
-       преподавателю. Обратитесь к завкафедрой — привязка делается в админ-панели,
-       в карточке преподавателя, полем «Логин в системе».</p>
-    <p class="muted">Если у вас есть логин преподавателя — выйдите и войдите под ним.</p>
+    <h1 style="margin-bottom:10px">{% translate "O‘qituvchi kartochkasi topilmadi" %}</h1>
+    <p>{% blocktranslate trimmed with username=request.user.username %}
+      Siz <b>{{ username }}</b> sifatida kirdingiz, lekin bu login hech qaysi o‘qituvchiga
+      biriktirilmagan. Kafedra mudiriga murojaat qiling — biriktirish admin-panelda,
+      o‘qituvchi kartochkasidagi «Tizimdagi login» maydonida qilinadi.
+    {% endblocktranslate %}</p>
+    <p class="muted">{% translate "Agar sizda o‘qituvchi logini bo‘lsa — chiqib, u bilan qayta kiring." %}</p>
     <div class="form-actions">
       <form action="{% url 'logout' %}?next={% url 'login' %}" method="post">{% csrf_token %}
-        <button class="button" type="submit">Выйти и войти под другим логином</button>
+        <button class="button" type="submit">{% translate "Chiqish va boshqa login bilan kirish" %}</button>
       </form>
       {% if request.user.is_staff %}
-        <a class="button secondary" href="{% url 'dashboard:index' %}">Отчёты кафедры</a>
+        <a class="button secondary" href="{% url 'dashboard:index' %}">{% translate "Kafedra hisobotlari" %}</a>
       {% endif %}
     </div>
   </div>

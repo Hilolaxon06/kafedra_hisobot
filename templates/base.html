@@ -1,9 +1,9 @@
-<!doctype html>
-<html lang="ru">
+{% load i18n %}{% get_current_language as LANGUAGE_CODE %}<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Кафедра — хисобот{% endblock %}</title>
+  <title>{% block title %}{% translate "Kafedra hisoboti" %}{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -141,35 +141,43 @@
 <div class="layout{% if not request.user.is_authenticated %} bare{% endif %}" id="layout">
   {% if request.user.is_authenticated %}
   <aside class="side">
-    <a class="brand" href="/"><span class="brand-mark">K</span><span>Kafedra hisoboti<small>Reyting va ko‘rsatkichlar</small></span></a>
+    <a class="brand" href="/"><span class="brand-mark">K</span><span>{% translate "Kafedra hisoboti" %}<small>{% translate "Reyting va ko‘rsatkichlar" %}</small></span></a>
 
     {% if request.user.teacher_profile %}
-      <div class="side-label">Shaxsiy kabinet</div>
+      <div class="side-label">{% translate "Shaxsiy kabinet" %}</div>
       <a class="nav {% if ns == 'portal' and url_name == 'index' %}active{% endif %}" href="{% url 'portal:index' %}">
-        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Мой кабинет</a>
+        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>{% translate "Mening kabinetim" %}</a>
       <a class="nav {% if ns == 'portal' and url_name == 'profile' %}active{% endif %}" href="{% url 'portal:profile' %}">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Мой профиль</a>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>{% translate "Mening profilim" %}</a>
       <a class="nav {% if slug == 'publications' %}active{% endif %}" href="{% url 'portal:list' 'publications' %}">
-        <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Maqolalar</a>
+        <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>{% translate "Maqolalar" %}</a>
       <a class="nav {% if slug == 'hindex' %}active{% endif %}" href="{% url 'portal:list' 'hindex' %}">
-        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>H-индекс</a>
+        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>{% translate "H-indeks" %}</a>
     {% endif %}
 
     {% if request.user.is_staff %}
-      <div class="side-label">Kafedra</div>
+      <div class="side-label">{% translate "Kafedra" %}</div>
       <a class="nav {% if ns == 'dashboard' and url_name == 'index' %}active{% endif %}" href="{% url 'dashboard:index' %}">
-        <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>Отчёты кафедры</a>
+        <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>{% translate "Kafedra hisobotlari" %}</a>
       <a class="nav {% if ns == 'dashboard' and url_name == 'teachers' %}active{% endif %}" href="{% url 'dashboard:teachers' %}">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Jadval</a>
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>{% translate "Jadval" %}</a>
+      <a class="nav {% if not ns and url_name == 'reyting' %}active{% endif %}" href="{% url 'reyting' %}">
+        <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>{% translate "Reyting" %}</a>
+      <a class="nav {% if ns == 'analytics' and url_name == 'statistika' %}active{% endif %}" href="{% url 'analytics:statistika' %}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></svg>{% translate "Statistika" %}</a>
       <a class="nav" href="{% url 'admin:index' %}">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Админ-панель</a>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>{% translate "Admin-panel" %}</a>
     {% endif %}
+
+    <div class="side-label">{% translate "Hisob" %}</div>
+    <a class="nav {% if not ns and url_name == 'sozlamalar' %}active{% endif %}" href="{% url 'sozlamalar' %}">
+      <svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>{% translate "Sozlamalar" %}</a>
 
     <div class="side-user">
       <span class="avatar">{{ request.user.username|slice:":1" }}</span>
       <div class="who">
         <b>{{ request.user.get_full_name|default:request.user.username }}</b>
-        <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button type="submit">Выйти</button></form>
+        <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button type="submit">{% translate "Chiqish" %}</button></form>
       </div>
     </div>
   </aside>
@@ -178,8 +186,8 @@
   <div style="min-width:0">
     {% if request.user.is_authenticated %}
     <div class="topbar">
-      <button type="button" aria-label="Menyu" onclick="document.getElementById('layout').classList.toggle('open')">☰</button>
-      <b>Kafedra hisoboti</b>
+      <button type="button" aria-label="{% translate "Menyu" %}" onclick="document.getElementById('layout').classList.toggle('open')">☰</button>
+      <b>{% translate "Kafedra hisoboti" %}</b>
     </div>
     {% endif %}
     <main>

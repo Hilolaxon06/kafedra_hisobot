@@ -1,7 +1,8 @@
 {% extends "portal/base.html" %}
+{% load i18n %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-  <a class="back" href="{% if slug %}{% url 'portal:list' slug %}{% else %}{% url 'portal:index' %}{% endif %}">← назад</a>
+  <a class="back" href="{% if slug %}{% url 'portal:list' slug %}{% else %}{% url 'portal:index' %}{% endif %}">{% translate "← orqaga" %}</a>
   <div class="page-head"><h1>{{ title }}</h1></div>
 
   <div class="card form-card">
@@ -11,8 +12,8 @@
       {% for field in form.hidden_fields %}{{ field }}{% endfor %}
       {% for field in form.visible_fields %}{% include "portal/_field.html" %}{% endfor %}
       <div class="form-actions">
-        <button class="button" type="submit">Сохранить</button>
-        <a class="button secondary" href="{% if slug %}{% url 'portal:list' slug %}{% else %}{% url 'portal:index' %}{% endif %}">Отмена</a>
+        <button class="button" type="submit">{% translate "Saqlash" %}</button>
+        <a class="button secondary" href="{% if slug %}{% url 'portal:list' slug %}{% else %}{% url 'portal:index' %}{% endif %}">{% translate "Bekor qilish" %}</a>
       </div>
     </form>
   </div>

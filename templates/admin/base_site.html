@@ -112,6 +112,7 @@
 {% if request.user|is_mudiri %}
   <a href="{% url 'dashboard:index' %}">Hisobotlarni yuklab olish</a>
   <a href="{% url 'dashboard:teachers' %}">O‘qituvchilar jadvali</a>
+  <a href="{% url 'analytics:statistika' %}">Statistika</a>
   {% if request.user.teacher_profile %}<a href="{% url 'portal:index' %}">Mening kabinetim</a>{% endif %}
   {% if user.has_usable_password %}<a href="{% url 'admin:password_change' %}">Parolni o‘zgartirish</a>{% endif %}
   <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
