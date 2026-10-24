@@ -75,7 +75,7 @@
     <ul>
       <li>{% blocktranslate trimmed with q1=weights.pub_Q1 q2=weights.pub_Q2 q3=weights.pub_Q3 q4=weights.pub_Q4 noq=weights.pub_ranked_noq %}Scopus / WoS maqola: Q1 — {{ q1 }}, Q2 — {{ q2 }}, Q3 — {{ q3 }}, Q4 — {{ q4 }}, kvartilsiz — {{ noq }} ball (hammuallif kafedradoshlar orasida 1/N ulush bilan){% endblocktranslate %}</li>
       <li>{% blocktranslate trimmed with oak=weights.pub_oak foreign=weights.pub_foreign local=weights.pub_local conf=weights.pub_conference other=weights.pub_other %}OAK jurnali — {{ oak }}, boshqa xorijiy — {{ foreign }}, respublika jurnali — {{ local }}, konferensiya — {{ conf }}, boshqa — {{ other }}{% endblocktranslate %}</li>
-      <li>{% blocktranslate trimmed with h=weights.hindex patent=weights.patent funding=weights.funding_per_mln %}H-indeks birligi — {{ h }}, patent — {{ patent }}, har 1 mln so‘m mablag‘ — {{ funding }}{% endblocktranslate %}</li>
+      <li>{% blocktranslate trimmed with h=weights.hindex patent=weights.patent funding=weights.funding_per_mln %}H-indeks birligi — {{ h }}, patent (EHM dasturi / ma’lumotlar bazasi guvohnomasi — faqat litsenziya shartnomasi bilan) — {{ patent }}, har 1 mln so‘m mablag‘ — {{ funding }}{% endblocktranslate %}</li>
       <li>{% blocktranslate trimmed with phd=weights.defense_PhD dsc=weights.defense_DSc mobility=weights.mobility %}PhD himoyasi — {{ phd }}, DSc himoyasi — {{ dsc }}, o‘qituvchi mobilligi — {{ mobility }}{% endblocktranslate %}</li>
       <li>{% blocktranslate trimmed with pct=weights.degree_share_pct %}Jami ball o‘qituvchilar soniga bo‘linadi va unga ilmiy darajalilar ulushining har 1 foizi uchun {{ pct }} ball qo‘shiladi.{% endblocktranslate %}</li>
     </ul>

@@ -69,6 +69,7 @@ assert r.status_code == 200
 pdf = SimpleUploadedFile("article.pdf", b"%PDF-1.4 fake content", content_type="application/pdf")
 r = c1.post("/kabinet/publications/add/", {
     "reporting_period": period.id,
+    "indexing": "scopus",
     "journal_name": "Test Journal",
     "publish_year": 2026,
     "publish_month": 3,

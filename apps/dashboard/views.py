@@ -59,7 +59,8 @@ def download_report(request, period_id):
 
 @_staff_only
 def download_package(request, period_id):
-    """Один ZIP: рейтинговая таблица + реестр статей + PDF статей по папкам преподавателей."""
+    """Один ZIP: рейтинговая таблица + реестр документов + подтверждающие файлы
+    (дипломы, статьи, патенты, договоры) по папкам преподавателей и листов."""
     period = get_object_or_404(_my_periods(request).select_related("department"), pk=period_id)
     try:
         archive, filename = build_package(period.department, period)

@@ -126,6 +126,9 @@ def generic_form(request, slug, pk=None):
         if form.is_valid():
             obj = form.save(commit=False)
             setattr(obj, cfg["teacher_field"], teacher)
+            # преподаватель изменил число соавторов — завкафедрой должен проверить заново
+            if "department_co_authors_count" in form.changed_data:
+                obj.co_authors_checked = False
             # поле преподавателя не входит в форму, поэтому unique_together
             # (напр. один h-индекс на период) проверяем сами, а не ловим IntegrityError
             try:

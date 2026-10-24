@@ -26,7 +26,8 @@ REGISTRY = {
             "article_title", "language", "scopus_url", "quartile", "citation_tier",
             "citations_count", "department_co_authors_count", "article_file",
         ],
-        "list_columns": ["reporting_period", "indexing", "article_title", "quartile", "article_file"],
+        "list_columns": ["reporting_period", "indexing", "article_title", "quartile",
+                         "department_co_authors_count", "share", "co_authors_checked", "article_file"],
     },
     "hindex": {
         "model": TeacherHIndex,

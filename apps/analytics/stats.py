@@ -15,10 +15,12 @@ uchun). Metodika o'zgarsa — faqat WEIGHTS ni tahrirlang.
 from collections import OrderedDict
 from decimal import Decimal
 
-from django.db.models import Max, Sum
+from django.db.models import F, Max, Q, Sum
+from django.urls import reverse
 from django.utils.translation import gettext as _g, gettext_lazy as _
 
 from apps.dashboard.views import _degree_column
+from apps.reports.coauthors import department_year_publications, effective_shares, mismatched
 from apps.reports.models import (
     Funding, GraduateEmployment, Patent, PostgradDefense, Publication,
     StudentMobility, TeacherHIndex, TeacherMobility,
@@ -33,7 +35,7 @@ WEIGHTS = {
     "pub_oak": 2, "pub_foreign": 2, "pub_local": 1,
     "pub_conference": 0.5, "pub_other": 1,
     "hindex": 1,                  # har bir h-indeks birligi
-    "patent": 5,
+    "patent": 5,                  # patent; guvohnoma — faqat litsenziya shartnomasi bilan
     "funding_per_mln": 0.5,       # har 1 mln so'm uchun
     "defense_PhD": 6, "defense_DSc": 10,
     "mobility": 2,                # o'qituvchi mobilligi (har biri)
@@ -50,6 +52,8 @@ DEGREE_LABELS = OrderedDict([("dsc", _("DSc / fan doktori")), ("phd", _("PhD / f
 PATENT_LABELS = OrderedDict([
     ("invention", _("Ixtiro")), ("utility_model", _("Foydali model")),
     ("industrial_design", _("Sanoat namunasi")), ("selection_achievement", _("Seleksiya yutug'i")),
+    ("software_certificate", _("EHM dasturi uchun guvohnoma")),
+    ("database_certificate", _("Ma'lumotlar bazasi uchun guvohnoma")),
 ])
 FUNDING_LABELS = OrderedDict([
     ("foreign_international", _("Xorijiy / xalqaro")), ("state_program", _("Davlat dasturlari")),
@@ -66,10 +70,6 @@ def available_years(departments):
     years = (ReportingPeriod.objects.filter(department__in=departments)
              .values_list("period_date__year", flat=True).distinct())
     return sorted(set(years), reverse=True)
-
-
-def _share(pub):
-    return Decimal(1) / Decimal(pub.department_co_authors_count or 1)
 
 
 def _r(value, digits=2):
@@ -100,12 +100,15 @@ def department_year(department, year):
     data.update(staff=staff, degrees=degrees, with_degree=with_degree,
                 degree_share=_r(100 * with_degree / staff, 1) if staff else 0.0)
 
-    # --- maqolalar (1/N ulush)
+    # --- maqolalar (1/N ulush; bitta maqolani bir necha kafedradosh kiritgan
+    # bo'lsa — kiritganlar soni bo'yicha, apps/reports/coauthors.py)
     indexing = OrderedDict((k, Decimal(0)) for k in INDEXING_LABELS)
     quartiles = OrderedDict((k, Decimal(0)) for k in QUARTILE_LABELS)
     citations = 0
-    for pub in Publication.objects.filter(reporting_period__in=periods):
-        share = _share(pub)
+    pubs = list(Publication.objects.filter(reporting_period__in=periods).select_related("reporting_period"))
+    shares = effective_shares(pubs)
+    for pub in pubs:
+        share = shares[pub.pk]
         indexing[pub.indexing] = indexing.get(pub.indexing, Decimal(0)) + share
         if pub.indexing in Publication.RANKED_INDEXINGS:
             quartiles[pub.quartile or "none"] += share
@@ -123,11 +126,16 @@ def department_year(department, year):
             .values("teacher").annotate(h=Max("h_index")))
     data["hindex"] = sum(row["h"] for row in hmax)
 
-    # --- patentlar
+    # --- patentlar: diagrammada barcha turlar; ball va «Patentlar» sonida —
+    # 2,4-varaqdagidek: patentlar + litsenziya shartnomasi bor guvohnomalar
     patents = OrderedDict((k, 0) for k in PATENT_LABELS)
-    for ptype in Patent.objects.filter(reporting_period__in=periods).values_list("patent_type", flat=True):
+    counted = 0
+    for ptype, licensed in (Patent.objects.filter(reporting_period__in=periods)
+                            .values_list("patent_type", "has_license_agreement")):
         patents[ptype] = patents.get(ptype, 0) + 1
-    data.update(patent_types=patents, patents=sum(patents.values()))
+        if ptype in Patent.CLASSIC_TYPES or licensed:
+            counted += 1
+    data.update(patent_types=patents, patents=counted)
 
     # --- jalb qilingan mablag'lar
     funding = OrderedDict((k, 0.0) for k in FUNDING_LABELS)
@@ -244,3 +252,43 @@ def charts(total):
         (_g("Dissertatsiya himoyalari"), slices(total["defense_types"], {}), ""),
         (_g("Bitiruvchilar bandligi"), slices(total["employment"], EMPLOYMENT_LABELS), ""),
     ]
+
+
+# o'qituvchiga tegishli fakt-jadvallar: (model, o'qituvchi maydoni)
+_TEACHER_FACTS = [
+    (Publication, "teacher"), (TeacherHIndex, "teacher"), (Funding, "teacher"),
+    (TeacherMobility, "teacher"), (PostgradDefense, "advisor_teacher"),
+]
+
+
+def _admin_url(obj):
+    meta = obj._meta
+    return reverse(f"admin:{meta.app_label}_{meta.model_name}_change", args=[obj.pk])
+
+
+def data_warnings(departments, year):
+    """Statistikani buzadigan ma'lumot xatolari (mudir tuzatishi uchun):
+
+    - coauthors: bitta maqolani kafedradan N tadan ko'p odam kiritgan
+      (ulush kiritganlar soniga bo'linadi, lekin N ni to'g'rilash kerak);
+    - misfiled: o'qituvchining yozuvi boshqa kafedraning hisobot davriga
+      bog'langan — ko'rsatkich o'qituvchi kafedrasiga emas, o'sha kafedraga tushadi.
+    """
+    dept_ids = list(departments.values_list("pk", flat=True))
+    coauthors = []
+    for dept_id in dept_ids:
+        coauthors += [(pub, _admin_url(pub)) for pub in mismatched(department_year_publications(dept_id, year))]
+
+    misfiled = []
+    for model, field in _TEACHER_FACTS:
+        qs = (model.objects.filter(reporting_period__period_date__year=year)
+              .exclude(reporting_period__department=F(f"{field}__department"))
+              .filter(Q(reporting_period__department__in=dept_ids) | Q(**{f"{field}__department__in": dept_ids}))
+              .select_related(field, "reporting_period__department"))
+        for obj in qs:
+            misfiled.append({
+                "kind": model._meta.verbose_name, "teacher": getattr(obj, field),
+                "period": obj.reporting_period, "url": _admin_url(obj),
+            })
+    return {"coauthors": coauthors, "misfiled": misfiled}
+

@@ -16,11 +16,22 @@
 
 from pathlib import Path
 from decouple import config, Csv
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config("SECRET_KEY", default="dev-insecure-secret-key")
-DEBUG = config("DEBUG", default=True, cast=bool)
+# Standart holatda — prod rejimi (DEBUG=False). Lokal ishlash uchun .env da
+# DEBUG=True qo'ying. Prodda SECRET_KEY berilmasa (yoki .env.example dagi
+# namunaviy qiymat qolib ketsa) — sayt ishga tushmaydi.
+DEBUG = config("DEBUG", default=False, cast=bool)
+SECRET_KEY = config("SECRET_KEY", default="")
+if not SECRET_KEY or SECRET_KEY.startswith(("change-me", "dev-insecure")):
+    if not DEBUG:
+        raise ImproperlyConfigured(
+            "SECRET_KEY berilmagan: .env ga tasodifiy uzun SECRET_KEY yozing "
+            "(yoki lokal ishlash uchun DEBUG=True qo'ying)."
+        )
+    SECRET_KEY = SECRET_KEY or "dev-insecure-secret-key"
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1, 192.168.137.1", cast=Csv())
 
 INSTALLED_APPS = [

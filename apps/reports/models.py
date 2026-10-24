@@ -13,6 +13,10 @@
   отдельная таблица: не требует миграции схемы.
 """
 
+from decimal import Decimal
+
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -21,7 +25,30 @@ from apps.students.models import Student, Graduate
 from apps.workflow.models import ReportingPeriod
 
 
-class Publication(models.Model):
+class TeacherPeriodFactMixin:
+    """Запись преподавателя должна относиться к отчётному периоду его же
+    кафедры — иначе показатель уходит в статистику и отчёт чужой кафедры.
+    Проверяется при создании записи и при смене преподавателя/периода (старые
+    записи после перевода преподавателя на другую кафедру не блокируются)."""
+
+    teacher_field = "teacher"
+
+    def clean(self):
+        super().clean()
+        teacher_id = getattr(self, f"{self.teacher_field}_id")
+        if not teacher_id or not self.reporting_period_id:
+            return
+        if not self._state.adding:
+            old = type(self).objects.filter(pk=self.pk).values(f"{self.teacher_field}_id", "reporting_period_id").first()
+            if old == {f"{self.teacher_field}_id": teacher_id, "reporting_period_id": self.reporting_period_id}:
+                return
+        teacher = getattr(self, self.teacher_field)
+        if self.reporting_period.department_id != teacher.department_id:
+            raise ValidationError({"reporting_period": _(
+                "Этот отчётный период относится к другой кафедре — выберите период кафедры преподавателя.")})
+
+
+class Publication(TeacherPeriodFactMixin, models.Model):
     class Indexing(models.TextChoices):
         SCOPUS = "scopus", "Scopus"
         WOS = "wos", "Web of Science"
@@ -74,9 +101,14 @@ class Publication(models.Model):
     department_co_authors_count = models.PositiveSmallIntegerField(
         _("Число соавторов-сотрудников этой кафедры"),
         default=1,
-        help_text=_("Если статью написали несколько сотрудников кафедры вместе, в своде по "
-                    "квартилям (лист 2,1) каждому засчитывается доля 1/N — как в исходной "
-                    "методике министерства (там встречаются значения вида 0.33, 0.5, 0.66)."),
+        validators=[MinValueValidator(1), MaxValueValidator(50)],
+        help_text=_("Сколько сотрудников этой кафедры (включая вас) — авторы статьи. В рейтинге "
+                    "и своде по квартилям (лист 2,1) каждому засчитывается доля 1/N "
+                    "(0.5, 0.33 и т.п.). Завкафедрой проверяет это число и при ошибке исправляет."),
+    )
+    co_authors_checked = models.BooleanField(
+        _("Число соавторов проверено завкафедрой"), default=False,
+        help_text=_("Снимается автоматически, если преподаватель меняет число соавторов."),
     )
 
     class Meta:
@@ -87,6 +119,12 @@ class Publication(models.Model):
     def __str__(self):
         return f"{self.teacher} — {self.article_title[:40]}"
 
+    @property
+    def share(self):
+        """Доля автора в статье: 1/N, N — соавторы-сотрудники кафедры."""
+        return Decimal(1) / Decimal(self.department_co_authors_count or 1)
+    share.fget.short_description = _("Доля (1/N)")
+
     def save(self, *args, **kwargs):
         # у не-Scopus/WoS статей квартиля нет — не даём ему попасть в свод 2,1
         if self.indexing not in self.RANKED_INDEXINGS:
@@ -95,7 +133,7 @@ class Publication(models.Model):
         super().save(*args, **kwargs)
 
 
-class TeacherHIndex(models.Model):
+class TeacherHIndex(TeacherPeriodFactMixin, models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="hindex_records", verbose_name=_("Преподаватель"))
     reporting_period = models.ForeignKey(ReportingPeriod, on_delete=models.CASCADE, related_name="hindex_records", verbose_name=_("Отчётный период"))
     h_index = models.PositiveIntegerField(_("Индекс Хирша (Scopus)"))
@@ -115,6 +153,15 @@ class Patent(models.Model):
         UTILITY_MODEL = "utility_model", _("Полезная модель")
         INDUSTRIAL_DESIGN = "industrial_design", _("Промышленный образец")
         SELECTION = "selection_achievement", _("Селекционное достижение")
+        SOFTWARE_CERTIFICATE = "software_certificate", _("Свидетельство на программу для ЭВМ")
+        DATABASE_CERTIFICATE = "database_certificate", _("Свидетельство на базу данных")
+
+    # в колонку C листа 2,4 попадают только патенты; свидетельства на
+    # программы/базы данных учитываются лишь с лицензионным договором (колонка D)
+    CLASSIC_TYPES = (
+        PatentType.INVENTION, PatentType.UTILITY_MODEL,
+        PatentType.INDUSTRIAL_DESIGN, PatentType.SELECTION,
+    )
 
     reporting_period = models.ForeignKey(ReportingPeriod, on_delete=models.CASCADE, related_name="patents", verbose_name=_("Отчётный период"))
     title = models.CharField(_("Название"), max_length=500, blank=True)
@@ -144,7 +191,7 @@ class PatentAuthor(models.Model):
         unique_together = [("patent", "teacher")]
 
 
-class Funding(models.Model):
+class Funding(TeacherPeriodFactMixin, models.Model):
     class SourceType(models.TextChoices):
         FOREIGN = "foreign_international", _("Зарубежные / международные организации")
         STATE_PROGRAM = "state_program", _("Государственные научные программы")
@@ -166,7 +213,9 @@ class Funding(models.Model):
         return f"{self.teacher} — {self.amount}"
 
 
-class PostgradDefense(models.Model):
+class PostgradDefense(TeacherPeriodFactMixin, models.Model):
+    teacher_field = "advisor_teacher"
+
     class DegreeType(models.TextChoices):
         PHD = "PhD", _("PhD (фалсафа доктори)")
         DSC = "DSc", _("DSc (фан доктори)")
@@ -203,7 +252,7 @@ class ReputationVote(models.Model):
         return f"{self.teacher} — {self.source}: {self.votes_count}"
 
 
-class TeacherMobility(models.Model):
+class TeacherMobility(TeacherPeriodFactMixin, models.Model):
     class Direction(models.TextChoices):
         OUTBOUND = "outbound", _("Outbound")
         INBOUND = "inbound", _("Inbound")

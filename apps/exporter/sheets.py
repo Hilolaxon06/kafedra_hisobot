@@ -10,11 +10,10 @@
 подстановка {kafedra} (её заменяет engine.export_report). Оригинал с
 данными прежней кафедры сохранён рядом как kafedra_hisobot_template.original.xlsx.
 
-Ограничение, которое стоит знать: количество строк под каждую секцию в
-шаблоне фиксировано (столько, сколько было в исходном файле на момент
-выгрузки). Если сотрудников станет больше, чем строк-заготовок — вызовите
-ws.insert_rows(...) перед записью (см. TODO в fill_staffing_sheet) либо
-расширьте шаблон вручную на одну строку с той же заливкой/границами.
+Номера строк ниже — как в шаблоне. Если людей/записей больше, чем
+строк-заготовок в секции, секция расширяется (layout.SectionRows): строки
+вставляются с тем же оформлением, а следующие секции, примечания, подпись
+«Rektor» и формулы «Jami» сдвигаются вниз. Ничего не обрезается.
 """
 
 from collections import defaultdict
@@ -23,9 +22,11 @@ from decimal import Decimal
 from apps.dictionaries.models import EmploymentType
 from apps.staff.models import Teacher, TeacherPeriodSnapshot
 from apps.reports.models import (
-    TeacherHIndex, Publication, PatentAuthor, Funding,
+    TeacherHIndex, Publication, Patent, PatentAuthor, Funding,
     PostgradDefense, TeacherMobility,
 )
+from apps.reports.coauthors import department_year_publications, effective_shares
+from .layout import SectionRows
 
 
 _SECTION_CODES = [
@@ -69,8 +70,8 @@ def _clear_rows(ws, rows, last_col):
 # Лист "5" — штатная ведомость (5-jadval)
 # Колонки: A=T/r, B=Ф.И.Ш., C=год рождения, D=должность, E=ставка,
 #          F=учёная степень, G=учёное звание
-# Секции (по employment_type), с фиксированным числом строк-заготовок,
-# как в исходном файле:
+# Секции (по employment_type) и строки-заготовки в шаблоне (расширяются,
+# если людей больше):
 #   asosiy_shtat      -> строки 7..20  (14 строк)
 #   ichki_orindosh    -> строка  22    (1 строка)
 #   tashqi_orindosh   -> строки 24..26 (3 строки)
@@ -85,10 +86,10 @@ _STAFFING_SECTIONS = [
 
 
 def fill_staffing_sheet(ws, period):
+    rows = SectionRows(ws)
     for code, start_row, end_row in _STAFFING_SECTIONS:
-        # TODO: если людей больше, чем строк-заготовок — ws.insert_rows(...)
-        # и скопировать стиль последней строки шаблона на новые строки.
-        staff = _staff(period, code)[: end_row - start_row + 1]
+        staff = _staff(period, code)
+        start_row, end_row = rows.section(start_row, end_row, len(staff))
         _clear_rows(ws, range(start_row, end_row + 1), 7)
 
         for i, (teacher, snap) in enumerate(staff, start=1):
@@ -140,9 +141,12 @@ def _write_degree_share_row(ws, row, teacher, snap):
 
 
 def fill_academic_degree_share_sheet(ws, period):
+    rows = SectionRows(ws)
     for code, start, end in [("asosiy", 4, 17), ("ichki_orindosh", 19, 19)]:
+        staff = _staff(period, code)
+        start, end = rows.section(start, end, len(staff))
         _clear_rows(ws, range(start, end + 1), 11)
-        for i, (teacher, snap) in enumerate(_staff(period, code)[: end - start + 1], start=1):
+        for i, (teacher, snap) in enumerate(staff, start=1):
             row = start + i - 1
             ws.cell(row=row, column=1).value = i
             _write_degree_share_row(ws, row, teacher, snap)
@@ -158,8 +162,9 @@ def fill_degree_age_sheet(ws, period):
         (teacher for teacher, snap in staff if snap and snap.academic_degree_id),
         key=lambda teacher: teacher.full_name,
     )
-    _clear_rows(ws, range(3, 12), 4)
-    for i, teacher in enumerate(with_degree[:9], start=1):
+    start, end = SectionRows(ws).section(3, 11, len(with_degree))
+    _clear_rows(ws, range(start, end + 1), 4)
+    for i, teacher in enumerate(with_degree, start=1):
         row = 2 + i
         ws.cell(row=row, column=1).value = i
         ws.cell(row=row, column=2).value = teacher.full_name
@@ -179,35 +184,41 @@ def fill_hindex_sheet(ws, period):
         rec.teacher_id: rec.h_index
         for rec in TeacherHIndex.objects.filter(reporting_period=period)
     }
+    rows = SectionRows(ws)
     for code, start, end in [("asosiy", 3, 16), ("ichki_orindosh", 18, 18)]:
+        staff = _staff(period, code)
+        start, end = rows.section(start, end, len(staff))
         _clear_rows(ws, range(start, end + 1), 3)
-        for i, (teacher, _snap) in enumerate(_staff(period, code)[: end - start + 1], start=1):
+        for i, (teacher, _snap) in enumerate(staff, start=1):
             row = start + i - 1
             ws.cell(row=row, column=1).value = i
             ws.cell(row=row, column=2).value = teacher.full_name
             ws.cell(row=row, column=3).value = hindex_by_teacher.get(teacher.pk)
 
 
-def _share(pubs_qs):
-    """1/N-доля публикации на соавтора-сотрудника кафедры (см. Publication.
-    department_co_authors_count) — так в исходной методике получаются
-    дробные значения вроде 0.33/0.5/0.66 в своде по квартилям."""
+def _share(pubs_qs, shares):
+    """Сумма 1/N-долей публикаций (N — соавторы-сотрудники кафедры; если
+    статью внесло больше сотрудников, чем N, — по числу внесших, см.
+    apps/reports/coauthors.py). Так в исходной методике получаются дробные
+    значения вроде 0.33/0.5/0.66 в своде по квартилям."""
     total = Decimal("0")
     for pub in pubs_qs:
-        total += Decimal(1) / Decimal(pub.department_co_authors_count or 1)
+        total += shares[pub.pk]
     if not total:
         return None
     return float(round(total, 2))
 
 
-def _write_sparse_rows(ws, start_row, end_row, entries, value_columns):
+def _write_sparse_rows(rows, start_row, end_row, entries, value_columns):
     """Общий помощник для «разреженных» листов (2,4 / 2,6 / 3,4 и т.п.),
     где в шаблоне не 14 строк на весь штат, а несколько строк под тех, у
     кого вообще есть что показать. entries — [(имя, (знач1, знач2, ...)), ...].
+    rows — SectionRows листа: если записей больше, чем строк, секция растёт.
     """
-    capacity = end_row - start_row + 1
+    ws = rows.ws
+    start_row, end_row = rows.section(start_row, end_row, len(entries))
     row = start_row
-    for i, (name, values) in enumerate(entries[:capacity], start=1):
+    for i, (name, values) in enumerate(entries, start=1):
         ws.cell(row=row, column=1).value = i
         ws.cell(row=row, column=2).value = name
         for col, value in zip(value_columns, values):
@@ -226,20 +237,22 @@ def _write_sparse_rows(ws, start_row, end_row, entries, value_columns):
 # её не трогаем, пересчитается сама при открытии файла.
 # ---------------------------------------------------------------------------
 def fill_publications_quartile_sheet(ws, period):
+    shares = effective_shares(department_year_publications(period.department_id, period.period_date.year))
+    rows = SectionRows(ws)
     for code, start, end in [("asosiy", 3, 16), ("ichki_orindosh", 18, 18)]:
         entries = []
-        for teacher, _snap in _staff(period, code)[: end - start + 1]:
+        for teacher, _snap in _staff(period, code):
             pubs = Publication.objects.filter(teacher=teacher, reporting_period=period,
                                               indexing=Publication.Indexing.SCOPUS)
             entries.append((teacher.full_name, (
-                _share(pubs.filter(citation_tier="top1")),
-                _share(pubs.filter(citation_tier="top10")),
-                _share(pubs.filter(quartile="Q1")),
-                _share(pubs.filter(quartile="Q2")),
-                _share(pubs.filter(quartile="Q3")),
-                _share(pubs.filter(quartile="Q4")),
+                _share(pubs.filter(citation_tier="top1"), shares),
+                _share(pubs.filter(citation_tier="top10"), shares),
+                _share(pubs.filter(quartile="Q1"), shares),
+                _share(pubs.filter(quartile="Q2"), shares),
+                _share(pubs.filter(quartile="Q3"), shares),
+                _share(pubs.filter(quartile="Q4"), shares),
             )))
-        _write_sparse_rows(ws, start, end, entries, value_columns=[3, 4, 5, 6, 7, 8])
+        _write_sparse_rows(rows, start, end, entries, value_columns=[3, 4, 5, 6, 7, 8])
 
 
 # ---------------------------------------------------------------------------
@@ -257,9 +270,12 @@ def fill_publications_list_sheet(ws, period):
     def joined(pubs, func):
         return "\n".join(func(p) for p in pubs) or None
 
+    rows = SectionRows(ws)
     for code, start, end in [("asosiy", 3, 16), ("ichki_orindosh", 18, 18)]:
+        staff = _staff(period, code)
+        start, end = rows.section(start, end, len(staff))
         _clear_rows(ws, range(start, end + 1), 8)
-        for i, (teacher, _snap) in enumerate(_staff(period, code)[: end - start + 1], start=1):
+        for i, (teacher, _snap) in enumerate(staff, start=1):
             row = start + i - 1
             ws.cell(row=row, column=1).value = i
             ws.cell(row=row, column=2).value = teacher.full_name
@@ -277,20 +293,28 @@ def fill_publications_list_sheet(ws, period):
 
 # ---------------------------------------------------------------------------
 # Лист "2,4" — патенты/объекты интеллектуальной собственности.
-# Колонки: A=T/r,B=Ф.И.Ш.,C=число патентов,D=из них с лицензионным договором.
-# Разреженный список (не весь штат) — только те, у кого есть патенты. Строки 3..5.
+# Колонки: A=T/r, B=Ф.И.Ш.,
+#   C = патенты на изобретение, полезную модель, промышленный образец,
+#       селекционное достижение (Patent.CLASSIC_TYPES); свидетельства на
+#       программы для ЭВМ / базы данных сюда НЕ входят;
+#   D = объекты интеллектуальной собственности с лицензионным договором —
+#       любого типа, в т.ч. свидетельства. Свидетельство без договора не
+#       учитывается нигде (так по тексту формы; уточнить у отдела рейтинга).
+# Разреженный список (не весь штат) — только те, у кого есть что показать.
+# Строки 3..5.
 # ---------------------------------------------------------------------------
 def fill_patents_share_sheet(ws, period):
     stats = defaultdict(lambda: [0, 0])
     for pa in PatentAuthor.objects.filter(patent__reporting_period=period).select_related("patent", "teacher"):
-        stats[pa.teacher][0] += 1
+        if pa.patent.patent_type in Patent.CLASSIC_TYPES:
+            stats[pa.teacher][0] += 1
         if pa.patent.has_license_agreement:
             stats[pa.teacher][1] += 1
     entries = sorted(
-        ((t.full_name, tuple(v)) for t, v in stats.items()),
+        ((t.full_name, tuple(v)) for t, v in stats.items() if any(v)),
         key=lambda x: x[0],
     )
-    _write_sparse_rows(ws, 3, 5, entries, value_columns=[3, 4])
+    _write_sparse_rows(SectionRows(ws), 3, 5, entries, value_columns=[3, 4])
 
 
 # ---------------------------------------------------------------------------
@@ -307,7 +331,7 @@ def fill_funding_sheet(ws, period):
         ((t.full_name, tuple(float(v) if v else None for v in vals)) for t, vals in stats.items()),
         key=lambda x: x[0],
     )
-    _write_sparse_rows(ws, 3, 6, entries, value_columns=[3, 4, 5])
+    _write_sparse_rows(SectionRows(ws), 3, 6, entries, value_columns=[3, 4, 5])
 
 
 # ---------------------------------------------------------------------------
@@ -321,6 +345,7 @@ def fill_postgrad_efficiency_sheet(ws, period):
     for d in PostgradDefense.objects.filter(reporting_period=period):
         defense_counts[d.advisor_teacher_id] += 1
 
+    rows = SectionRows(ws)
     for code, start, end in [("asosiy", 3, 7), ("ichki_orindosh", 9, 9)]:
         entries = []
         for teacher, snap in _staff(period, code):
@@ -331,7 +356,7 @@ def fill_postgrad_efficiency_sheet(ws, period):
                     defenses or None,
                     1 if no_degree else None,
                 )))
-        _write_sparse_rows(ws, start, end, entries, value_columns=[3, 4])
+        _write_sparse_rows(rows, start, end, entries, value_columns=[3, 4])
 
 
 # ---------------------------------------------------------------------------
@@ -346,7 +371,7 @@ def fill_teacher_mobility_sheet(ws, period):
         ((t.full_name, tuple(v or None for v in vals)) for t, vals in stats.items()),
         key=lambda x: x[0],
     )
-    _write_sparse_rows(ws, 3, 5, entries, value_columns=[3, 4])
+    _write_sparse_rows(SectionRows(ws), 3, 5, entries, value_columns=[3, 4])
 
 
 SHEET_FILLERS = {

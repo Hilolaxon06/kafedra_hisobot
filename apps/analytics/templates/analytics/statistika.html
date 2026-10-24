@@ -35,6 +35,10 @@
     .kh-legend i { width: 12px; height: 12px; border-radius: 3px; }
     .kh-legend b { font-variant-numeric: tabular-nums; }
     .kh-legend em { color: var(--muted); font-style: normal; font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
+    .kh-warn { background: var(--warn-soft); color: var(--warn); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; }
+    .kh-warn b { display: block; margin-bottom: 4px; }
+    .kh-warn ul { margin: 4px 0 8px; padding-left: 18px; }
+    .kh-warn a { color: inherit; text-decoration: underline; }
     @media (max-width: 767px) { .kh-pie-body { flex-direction: column; align-items: stretch; } .kh-pie svg { align-self: center; } }
 {% endblock %}
 
@@ -68,6 +72,23 @@
       {% else %}{% translate "Hisobingiz hali kafedraga biriktirilmagan — administratorga murojaat qiling." %}{% endif %}
     </div>
   {% else %}
+  {% if warnings.coauthors or warnings.misfiled %}
+  <div class="kh-warn" role="alert">
+    <b>{% translate "Ma’lumotlarda xatolar bor — ular ko‘rsatkichlarga ta’sir qiladi" %}</b>
+    {% if warnings.coauthors %}
+      {% translate "Bitta maqolani kafedradan ko‘rsatilgan hammualliflar sonidan (N) ko‘p odam kiritgan. Ulush kiritganlar soniga bo‘lib hisoblandi; N ni tekshirib to‘g‘rilang:" %}
+      <ul>{% for pub, url in warnings.coauthors %}
+        <li><a href="{{ url }}">{{ pub.teacher.full_name }} — «{{ pub.article_title|truncatechars:60 }}»</a> (N = {{ pub.department_co_authors_count }})</li>
+      {% endfor %}</ul>
+    {% endif %}
+    {% if warnings.misfiled %}
+      {% translate "Bu yozuvlar o‘qituvchining kafedrasiga emas, boshqa kafedraning hisobot davriga bog‘langan — ko‘rsatkich o‘sha kafedraga tushyapti. Davrni to‘g‘rilang:" %}
+      <ul>{% for w in warnings.misfiled %}
+        <li><a href="{{ w.url }}">{{ w.kind|capfirst }}: {{ w.teacher.full_name }} ({{ w.teacher.department }}) → {{ w.period.department }}, {{ w.period.period_label }}</a></li>
+      {% endfor %}</ul>
+    {% endif %}
+  </div>
+  {% endif %}
   <div class="kh-kpis">
     <div class="kh-kpi"><b>{{ total.staff }}</b><span>{% translate "O‘qituvchilar" %}</span></div>
     <div class="kh-kpi"><b>{{ total.degree_share }}%</b><span>{% translate "Ilmiy darajalilar ulushi" %}</span></div>

@@ -63,6 +63,7 @@ def statistika(request):
         "departments": departments, "years": years, "year": year, "selected": selected,
         "rows": rows, "total": total, "charts": stats.charts(total) if total else [],
         "series": stats.yearly_series(chosen),
+        "warnings": stats.data_warnings(chosen, year) if year else {},
     })
 
 

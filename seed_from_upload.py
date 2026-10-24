@@ -1,6 +1,6 @@
 """
 Разовый скрипт: загружает реальные данные преподавателей из присланного
-файла (kafedra_hisobot_template.xlsx, лист "5" — штатная ведомость) в БД.
+файла (kafedra_hisobot_template.original.xlsx, лист "5" — штатная ведомость) в БД.
 Используется здесь только чтобы проверить, что модели и exporter реально
 работают на настоящих данных, а не на выдуманных. Запуск:
 
@@ -14,7 +14,7 @@ from apps.dictionaries.models import EmploymentType, Position, AcademicDegree, A
 from apps.staff.models import Teacher, TeacherPeriodSnapshot
 from apps.workflow.models import ReportingPeriod
 
-TEMPLATE = "apps/exporter/templates_store/kafedra_hisobot_template.xlsx"
+TEMPLATE = "apps/exporter/templates_store/kafedra_hisobot_template.original.xlsx"
 
 uni, _ = University.objects.get_or_create(short_name="ФерГУ", defaults={"name": "Farg'ona Davlat Universiteti"})
 fac, _ = Faculty.objects.get_or_create(university=uni, name="Amaliy matematika va informatika fakulteti", defaults={"short_name": "AMI"})

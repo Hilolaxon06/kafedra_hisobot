@@ -35,6 +35,10 @@ msgid "Dissertatsiya himoyalari"
 msgstr "Защиты диссертаций"
 
 #: apps/analytics/stats.py
+msgid "EHM dasturi uchun guvohnoma"
+msgstr "Свидетельство на программу для ЭВМ"
+
+#: apps/analytics/stats.py
 msgid "Foydali model"
 msgstr "Полезная модель"
 
@@ -73,6 +77,10 @@ msgstr "Конференция"
 #: apps/analytics/stats.py
 msgid "Kvartilsiz"
 msgstr "Без квартиля"
+
+#: apps/analytics/stats.py
+msgid "Ma'lumotlar bazasi uchun guvohnoma"
+msgstr "Свидетельство на базу данных"
 
 #: apps/analytics/stats.py
 msgid "Mablag'lar"
@@ -178,8 +186,8 @@ msgstr "Факультет"
 
 #: apps/analytics/templates/analytics/reyting.html
 #, python-format
-msgid "H-indeks birligi — %(h)s, patent — %(patent)s, har 1 mln so‘m mablag‘ — %(funding)s"
-msgstr "Единица h-индекса — %(h)s, патент — %(patent)s, каждый 1 млн сумов средств — %(funding)s"
+msgid "H-indeks birligi — %(h)s, patent (EHM dasturi / ma’lumotlar bazasi guvohnomasi — faqat litsenziya shartnomasi bilan) — %(patent)s, har 1 mln so‘m mablag‘ — %(funding)s"
+msgstr "Единица h-индекса — %(h)s, патент (свидетельство на программу для ЭВМ / базу данных — только с лицензионным договором) — %(patent)s, каждый 1 млн сумов средств — %(funding)s"
 
 #: apps/analytics/templates/analytics/reyting.html
 msgid "Himoya"
@@ -291,6 +299,14 @@ msgid "Bitiruvchilar"
 msgstr "Выпускники"
 
 #: apps/analytics/templates/analytics/statistika.html
+msgid "Bitta maqolani kafedradan ko‘rsatilgan hammualliflar sonidan (N) ko‘p odam kiritgan. Ulush kiritganlar soniga bo‘lib hisoblandi; N ni tekshirib to‘g‘rilang:"
+msgstr "Одну статью внесло больше сотрудников кафедры, чем указанное число соавторов (N). Доля посчитана по числу внесших; проверьте и исправьте N:"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Bu yozuvlar o‘qituvchining kafedrasiga emas, boshqa kafedraning hisobot davriga bog‘langan — ko‘rsatkich o‘sha kafedraga tushyapti. Davrni to‘g‘rilang:"
+msgstr "Эти записи привязаны не к кафедре преподавателя, а к отчётному периоду другой кафедры — показатель уходит той кафедре. Исправьте период:"
+
+#: apps/analytics/templates/analytics/statistika.html
 msgid "Diagramma ustiga sichqonchani olib borsangiz — aniq son va foiz ko‘rinadi."
 msgstr "Наведите курсор на диаграмму — появятся точное число и процент."
 
@@ -342,6 +358,10 @@ msgstr "Средства, сум"
 #: apps/analytics/templates/analytics/statistika.html
 msgid "Maqolalar (1/N ulush)"
 msgstr "Статьи (доля 1/N)"
+
+#: apps/analytics/templates/analytics/statistika.html
+msgid "Ma’lumotlarda xatolar bor — ular ko‘rsatkichlarga ta’sir qiladi"
+msgstr "В данных есть ошибки — они влияют на показатели"
 
 #: apps/analytics/templates/analytics/statistika.html
 msgid "O‘qituvchilar"
@@ -764,6 +784,14 @@ msgstr "не указано"
 msgid "yuklanmagan"
 msgstr "не загружен"
 
+#: apps/portal/templatetags/portal_extras.py
+msgid "ha"
+msgstr "да"
+
+#: apps/portal/templatetags/portal_extras.py
+msgid "yo‘q"
+msgstr "нет"
+
 #: apps/portal/views.py
 msgid "Bu davr uchun yozuv allaqachon bor — uni ochib o‘zgartiring."
 msgstr "За этот период запись уже есть — откройте её и измените."
@@ -779,6 +807,31 @@ msgstr "Данные профиля сохранены."
 #: apps/portal/views.py
 msgid "Saqlandi."
 msgstr "Сохранено."
+
+#: apps/reports/admin.py
+msgid "N меньше числа внесших статью"
+msgstr "N меньше числа внесших статью"
+
+#: apps/reports/admin.py
+#, python-format
+msgid "Tasdiqlandi: %(n)s ta maqola."
+msgstr "Подтверждено статей: %(n)s."
+
+#: apps/reports/admin.py
+msgid "Внесли статью на кафедре"
+msgstr "Внесли статью на кафедре"
+
+#: apps/reports/admin.py apps/reports/models.py
+msgid "Доля (1/N)"
+msgstr "Доля (1/N)"
+
+#: apps/reports/admin.py
+msgid "Отметить: число соавторов проверено"
+msgstr "Отметить: число соавторов проверено"
+
+#: apps/reports/admin.py
+msgid "Число соавторов"
+msgstr "Число соавторов"
 
 #: apps/reports/models.py
 msgid "DSc (фан доктори)"
@@ -895,10 +948,6 @@ msgstr "Другое (монография, учебник, статья)"
 #: apps/reports/models.py
 msgid "Другой зарубежный журнал"
 msgstr "Другой зарубежный журнал"
-
-#: apps/reports/models.py
-msgid "Если статью написали несколько сотрудников кафедры вместе, в своде по квартилям (лист 2,1) каждому засчитывается доля 1/N — как в исходной методике министерства (там встречаются значения вида 0.33, 0.5, 0.66)."
-msgstr "Если статью написали несколько сотрудников кафедры вместе, в своде по квартилям (лист 2,1) каждому засчитывается доля 1/N — как в исходной методике министерства (там встречаются значения вида 0.33, 0.5, 0.66)."
 
 #: apps/reports/models.py
 msgid "Есть лицензионный договор"
@@ -1061,8 +1110,24 @@ msgid "Сборник конференции (тезисы)"
 msgstr "Сборник конференции (тезисы)"
 
 #: apps/reports/models.py
+msgid "Свидетельство на базу данных"
+msgstr "Свидетельство на базу данных"
+
+#: apps/reports/models.py
+msgid "Свидетельство на программу для ЭВМ"
+msgstr "Свидетельство на программу для ЭВМ"
+
+#: apps/reports/models.py
 msgid "Селекционное достижение"
 msgstr "Селекционное достижение"
+
+#: apps/reports/models.py
+msgid "Сколько сотрудников этой кафедры (включая вас) — авторы статьи. В рейтинге и своде по квартилям (лист 2,1) каждому засчитывается доля 1/N (0.5, 0.33 и т.п.). Завкафедрой проверяет это число и при ошибке исправляет."
+msgstr "Сколько сотрудников этой кафедры (включая вас) — авторы статьи. В рейтинге и своде по квартилям (лист 2,1) каждому засчитывается доля 1/N (0.5, 0.33 и т.п.). Завкафедрой проверяет это число и при ошибке исправляет."
+
+#: apps/reports/models.py
+msgid "Снимается автоматически, если преподаватель меняет число соавторов."
+msgstr "Снимается автоматически, если преподаватель меняет число соавторов."
 
 #: apps/reports/models.py
 msgid "Совместная образовательная программа"
@@ -1161,6 +1226,10 @@ msgid "Число голосов"
 msgstr "Число голосов"
 
 #: apps/reports/models.py
+msgid "Число соавторов проверено завкафедрой"
+msgstr "Число соавторов проверено завкафедрой"
+
+#: apps/reports/models.py
 msgid "Число соавторов-сотрудников этой кафедры"
 msgstr "Число соавторов-сотрудников этой кафедры"
 
@@ -1183,6 +1252,10 @@ msgstr "Эксперт нац. агентства по качеству обра
 #: apps/reports/models.py
 msgid "Электронный PDF статьи"
 msgstr "Электронный PDF статьи"
+
+#: apps/reports/models.py
+msgid "Этот отчётный период относится к другой кафедре — выберите период кафедры преподавателя."
+msgstr "Этот отчётный период относится к другой кафедре — выберите период кафедры преподавателя."
 
 #: apps/reports/models.py
 msgid "Язык публикации"

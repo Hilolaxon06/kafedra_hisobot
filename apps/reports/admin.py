@@ -1,7 +1,10 @@
 from django.contrib import admin
+from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.access import DepartmentScopedAdminMixin
 
+from .coauthors import department_year_publications, entries_per_article, mismatched
 from .models import (
     Publication, TeacherHIndex, Patent, PatentAuthor, Funding,
     PostgradDefense, ReputationVote, TeacherMobility, StudentMobility,
@@ -9,13 +12,62 @@ from .models import (
 )
 
 
+class CoAuthorsMismatchFilter(admin.SimpleListFilter):
+    """Статьи, которые внесло больше сотрудников кафедры, чем указанное N."""
+
+    title = _("Число соавторов")
+    parameter_name = "coauthors"
+
+    def lookups(self, request, model_admin):
+        return [("mismatch", _("N меньше числа внесших статью"))]
+
+    def queryset(self, request, queryset):
+        if self.value() != "mismatch":
+            return queryset
+        scope = (Publication.objects
+                 .filter(reporting_period__department__in=queryset.values("reporting_period__department"))
+                 .select_related("reporting_period"))
+        return queryset.filter(pk__in=[pub.pk for pub in mismatched(scope)])
+
+
 @admin.register(Publication)
 class PublicationAdmin(DepartmentScopedAdminMixin, admin.ModelAdmin):
+    """Завкафедрой проверяет число соавторов-сотрудников (от него зависит доля
+    1/N в рейтинге и листе 2,1) и исправляет прямо в списке."""
+
     department_path = "teacher__department"
-    list_display = ("teacher", "reporting_period", "indexing", "quartile", "citation_tier", "citations_count", "publish_year")
-    list_filter = (("reporting_period", admin.RelatedOnlyFieldListFilter), "indexing", "quartile", "citation_tier")
+    list_display = ("teacher", "article_title", "reporting_period", "indexing", "quartile",
+                    "department_co_authors_count", "entries_display", "share_display", "co_authors_checked")
+    list_editable = ("department_co_authors_count", "co_authors_checked")
+    list_filter = (("reporting_period", admin.RelatedOnlyFieldListFilter), CoAuthorsMismatchFilter, "co_authors_checked",
+                   "indexing", "quartile", "citation_tier")
     search_fields = ("teacher__full_name", "article_title", "journal_name")
     autocomplete_fields = ("teacher", "reporting_period")
+    actions = ["mark_co_authors_checked"]
+
+    @admin.display(description=_("Внесли статью на кафедре"))
+    def entries_display(self, obj):
+        period = obj.reporting_period
+        entries = entries_per_article(
+            department_year_publications(period.department_id, period.period_date.year))[obj.pk]
+        if entries > (obj.department_co_authors_count or 1):
+            return format_html('<b style="color:var(--error-fg, #ba2121)">{} ⚠</b>', entries)
+        return entries
+
+    @admin.display(description=_("Доля (1/N)"))
+    def share_display(self, obj):
+        return f"{obj.share:.2f}"
+
+    @admin.action(description=_("Отметить: число соавторов проверено"))
+    def mark_co_authors_checked(self, request, queryset):
+        updated = queryset.update(co_authors_checked=True)
+        self.message_user(request, _("Tasdiqlandi: %(n)s ta maqola.") % {"n": updated})
+
+    def save_model(self, request, obj, form, change):
+        # исправленное завкафедрой число считается проверенным
+        if "department_co_authors_count" in form.changed_data:
+            obj.co_authors_checked = True
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(TeacherHIndex)
