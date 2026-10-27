@@ -271,13 +271,15 @@ def data_warnings(departments, year):
 
     - coauthors: bitta maqolani kafedradan N tadan ko'p odam kiritgan
       (ulush kiritganlar soniga bo'linadi, lekin N ni to'g'rilash kerak);
+      mudir yozuvni «tekshirildi» deb belgilagach, u bu ro'yxatdan chiqadi;
     - misfiled: o'qituvchining yozuvi boshqa kafedraning hisobot davriga
       bog'langan — ko'rsatkich o'qituvchi kafedrasiga emas, o'sha kafedraga tushadi.
     """
     dept_ids = list(departments.values_list("pk", flat=True))
     coauthors = []
     for dept_id in dept_ids:
-        coauthors += [(pub, _admin_url(pub)) for pub in mismatched(department_year_publications(dept_id, year))]
+        coauthors += [(pub, _admin_url(pub)) for pub in mismatched(department_year_publications(dept_id, year))
+                      if not pub.co_authors_checked]
 
     misfiled = []
     for model, field in _TEACHER_FACTS:

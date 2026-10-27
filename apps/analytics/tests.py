@@ -57,6 +57,18 @@ class StatsTest(TestCase):
         warnings = stats.data_warnings(Department.objects.filter(pk=self.dep.pk), 2026)
         self.assertEqual(len(warnings["coauthors"]), 2)
 
+    def test_checked_article_leaves_warnings(self):
+        # mudir tekshirib «tekshirildi» deb belgilagan yozuv ogohlantirishda ko'rinmaydi, ulush esa o'zgarmaydi
+        checked = self.pub(self.ali, "Bir maqola", co_authors_checked=True)
+        unchecked = self.pub(self.vali, "Bir maqola")
+        warnings = stats.data_warnings(Department.objects.filter(pk=self.dep.pk), 2026)
+        self.assertEqual([pub.pk for pub, _url in warnings["coauthors"]], [unchecked.pk])
+        self.assertEqual(stats.department_year(self.dep, 2026)["publications"], 1.0)
+
+        Publication.objects.filter(pk=unchecked.pk).update(co_authors_checked=True)
+        self.assertEqual(stats.data_warnings(Department.objects.filter(pk=self.dep.pk), 2026)["coauthors"], [])
+        self.assertTrue(Publication.objects.filter(pk=checked.pk, co_authors_checked=True).exists())
+
     def test_correct_n_gives_no_warning(self):
         self.pub(self.ali, "Maqola", n=2)
         self.pub(self.vali, "Maqola", n=2)
