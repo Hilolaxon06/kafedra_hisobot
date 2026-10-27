@@ -3,10 +3,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.forms import modelform_factory
-from django.http import Http404
+from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
 
+from apps.exporter import personal
 from apps.reports.models import Patent, PatentAuthor
 from apps.staff.models import Teacher
 from apps.workflow.models import ReportingPeriod
@@ -88,6 +89,32 @@ def profile(request):
         "snapshot": snapshots[0] if snapshots else None,
         "snapshots": snapshots,
     })
+
+
+def _report_period(request):
+    """Davrlar ro'yxati va tanlangan davr (?davr=<id>; yo'q — barcha davrlar)."""
+    periods = personal.teacher_periods(request.teacher)
+    davr = request.GET.get("davr")
+    period = periods.filter(pk=davr).first() if davr and davr.isdigit() else None
+    return periods, period
+
+
+@_require_teacher
+def report(request):
+    """Mening hisobotim: kiritilgan maqolalar va ilmiy ishlar bo'yicha jamlanma
+    va ularni fayllari bilan bitta ZIP qilib yuklab olish."""
+    periods, period = _report_period(request)
+    return render(request, "portal/report.html", {
+        "teacher": request.teacher, "periods": periods, "period": period,
+        "rows": personal.summary(request.teacher, period),
+    })
+
+
+@_require_teacher
+def report_zip(request):
+    _periods, period = _report_period(request)
+    archive, filename = personal.build_teacher_package(request.teacher, period)
+    return FileResponse(archive, as_attachment=True, filename=filename, content_type="application/zip")
 
 
 @_require_teacher

@@ -62,7 +62,7 @@ msgstr "Employed"
 msgid "Ixtiro"
 msgstr "Invention"
 
-#: apps/analytics/stats.py apps/portal/registry.py
+#: apps/analytics/stats.py apps/exporter/personal.py apps/portal/registry.py
 msgid "Jalb qilingan mablag‘lar"
 msgstr "Attracted funding"
 
@@ -86,7 +86,7 @@ msgstr "Database registration certificate"
 msgid "Mablag'lar"
 msgstr "Funding"
 
-#: apps/analytics/stats.py apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html apps/dashboard/templates/dashboard/index.html templates/base.html
+#: apps/analytics/stats.py apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html apps/dashboard/templates/dashboard/index.html apps/exporter/personal.py templates/base.html
 msgid "Maqolalar"
 msgstr "Articles"
 
@@ -214,7 +214,7 @@ msgstr "Department"
 msgid "Kafedralar reytingi"
 msgstr "Department ranking"
 
-#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html
+#: apps/analytics/templates/analytics/reyting.html apps/analytics/templates/analytics/statistika.html apps/portal/templates/portal/report.html
 msgid "Ko‘rsatish"
 msgstr "Show"
 
@@ -419,7 +419,7 @@ msgstr "The selected language is remembered in this browser."
 msgid "Parol almashtirildi."
 msgstr "Your password has been changed."
 
-#: apps/dashboard/templates/dashboard/index.html apps/portal/templates/portal/index.html apps/portal/templates/portal/patents_list.html apps/portal/templates/portal/profile.html
+#: apps/dashboard/templates/dashboard/index.html apps/portal/templates/portal/index.html apps/portal/templates/portal/patents_list.html apps/portal/templates/portal/profile.html apps/portal/templates/portal/report.html
 msgid "Davr"
 msgstr "Period"
 
@@ -525,21 +525,25 @@ msgstr "number"
 msgid "seriyasi"
 msgstr "series"
 
-#: apps/portal/registry.py
+#: apps/exporter/personal.py apps/portal/registry.py
 msgid "H-indeks (Scopus)"
 msgstr "H-index (Scopus)"
+
+#: apps/exporter/personal.py apps/portal/registry.py
+msgid "Mening rahbarligimdagi himoyalar"
+msgstr "Defences under my supervision"
+
+#: apps/exporter/personal.py
+msgid "Patentlar va guvohnomalar"
+msgstr "Patents and certificates"
+
+#: apps/exporter/personal.py apps/portal/registry.py
+msgid "Xalqaro mobillik"
+msgstr "International mobility"
 
 #: apps/portal/registry.py
 msgid "Maqolalar (Scopus va boshqalar)"
 msgstr "Articles (Scopus and others)"
-
-#: apps/portal/registry.py
-msgid "Mening rahbarligimdagi himoyalar"
-msgstr "Defences under my supervision"
-
-#: apps/portal/registry.py
-msgid "Xalqaro mobillik"
-msgstr "International mobility"
 
 #: apps/portal/templates/portal/base.html
 msgid "O‘qituvchi kabineti"
@@ -601,7 +605,7 @@ msgstr "Add"
 msgid "Yozuvlar:"
 msgstr "Records:"
 
-#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html apps/portal/templates/portal/profile.html
+#: apps/portal/templates/portal/list.html apps/portal/templates/portal/patents_list.html apps/portal/templates/portal/profile.html apps/portal/templates/portal/report.html
 msgid "← kabinetga"
 msgstr "← to my account"
 
@@ -693,6 +697,10 @@ msgid "F.I.Sh."
 msgstr "Full name"
 
 #: apps/portal/templates/portal/profile.html
+msgid "Hisobot (ZIP)"
+msgstr "Report (ZIP)"
+
+#: apps/portal/templates/portal/profile.html
 msgid "Hozir ishlaydi"
 msgstr "Currently employed"
 
@@ -700,7 +708,7 @@ msgstr "Currently employed"
 msgid "Ilmiy daraja"
 msgstr "Academic degree"
 
-#: apps/portal/templates/portal/profile.html
+#: apps/portal/templates/portal/profile.html apps/portal/templates/portal/report.html
 msgid "Ilmiy daraja diplomi"
 msgstr "Academic degree diploma"
 
@@ -784,13 +792,49 @@ msgstr "not provided"
 msgid "yuklanmagan"
 msgstr "not uploaded"
 
+#: apps/portal/templates/portal/report.html
+msgid "Barcha davrlar"
+msgstr "All periods"
+
+#: apps/portal/templates/portal/report.html
+msgid "Fayl biriktirilgan"
+msgstr "File attached"
+
+#: apps/portal/templates/portal/report.html
+msgid "Ko‘rsatkich"
+msgstr "Indicator"
+
+#: apps/portal/templates/portal/report.html templates/base.html
+msgid "Mening hisobotim"
+msgstr "My report"
+
+#: apps/portal/templates/portal/report.html
+msgid "Yozuvlar"
+msgstr "Records"
+
+#: apps/portal/templates/portal/report.html
+msgid "ZIP arxivda: Excel hisobot (umumiy varaq va har bir ko‘rsatkich bo‘yicha alohida varaq, qaysi fayl biriktirilgani bilan) hamda yuklangan fayllar papkalarda —"
+msgstr "The ZIP archive contains an Excel report (a summary sheet and a sheet per indicator, showing which file is attached) and the uploaded files in folders —"
+
+#: apps/portal/templates/portal/report.html
+msgid "ZIP yuklab olish"
+msgstr "Download ZIP"
+
+#: apps/portal/templates/portal/report.html
+msgid "barcha davrlar"
+msgstr "all periods"
+
+#: apps/portal/templates/portal/report.html
+msgid "bor"
+msgstr "yes"
+
+#: apps/portal/templates/portal/report.html apps/portal/templatetags/portal_extras.py
+msgid "yo‘q"
+msgstr "no"
+
 #: apps/portal/templatetags/portal_extras.py
 msgid "ha"
 msgstr "yes"
-
-#: apps/portal/templatetags/portal_extras.py
-msgid "yo‘q"
-msgstr "no"
 
 #: apps/portal/views.py
 msgid "Bu davr uchun yozuv allaqachon bor — uni ochib o‘zgartiring."

@@ -155,9 +155,9 @@ class ArchiveTest(ExportTestBase):
 
         root = "Arxiv_TK_2026-mart"
         self.assertIn(f"{root}/Reyting_TK_2026-mart.xlsx", names)
-        for folder, file in [("1,1 Diplomlar", "diplom"), ("2,1 Maqolalar", "maqola"),
-                             ("2,4-2,5 Patentlar va guvohnomalar", "guvohnoma"),
-                             ("2,6 Mablag'lar", "shartnoma")]:
+        for folder, file in [("Diplomlar", "diplom"), ("Maqolalar", "maqola"),
+                             ("Patentlar va guvohnomalar", "guvohnoma"),
+                             ("Mablag'lar", "shartnoma")]:
             self.assertTrue(any(n.startswith(f"{root}/Aliyev Ali/{folder}/{file}") for n in names), folder)
         # у Бобура ни одного файла — ни одной его папки в архиве
         self.assertFalse(any("Boboyev Bobur" in n for n in names))

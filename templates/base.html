@@ -149,6 +149,8 @@
         <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>{% translate "Mening kabinetim" %}</a>
       <a class="nav {% if ns == 'portal' and url_name == 'profile' %}active{% endif %}" href="{% url 'portal:profile' %}">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>{% translate "Mening profilim" %}</a>
+      <a class="nav {% if ns == 'portal' and url_name == 'report' %}active{% endif %}" href="{% url 'portal:report' %}">
+        <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg>{% translate "Mening hisobotim" %}</a>
       <a class="nav {% if slug == 'publications' %}active{% endif %}" href="{% url 'portal:list' 'publications' %}">
         <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>{% translate "Maqolalar" %}</a>
       <a class="nav {% if slug == 'hindex' %}active{% endif %}" href="{% url 'portal:list' 'hindex' %}">

@@ -4,9 +4,12 @@
 """
 
 import datetime
+import io
 import shutil
 import tempfile
+import zipfile
 
+import openpyxl
 from django.contrib.admin.sites import AdminSite
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -121,3 +124,51 @@ class PortalIsolationTest(TestCase):
         self.assertNotContains(response, "Moy test maqolasi")
         self.assertEqual(self.client.get(f"/kabinet/publications/{pub.id}/edit/").status_code, 404)
         self.assertNotContains(self.client.get("/kabinet/patents/"), "Test patenti")
+
+    def test_personal_report_zip_contains_only_own_records(self):
+        other_period = ReportingPeriod.objects.create(
+            department=self.dep, period_label="2025-dekabr", period_date=datetime.date(2025, 12, 31),
+        )
+        Publication.objects.create(
+            teacher=self.t1, reporting_period=self.period, article_title="Mening maqolam",
+            article_file=SimpleUploadedFile("mening.pdf", b"%PDF-1.4 a"),
+        )
+        Publication.objects.create(teacher=self.t1, reporting_period=other_period, article_title="Eski maqola")
+        Publication.objects.create(
+            teacher=self.t2, reporting_period=self.period, article_title="Begona maqola",
+            article_file=SimpleUploadedFile("begona.pdf", b"%PDF-1.4 b"),
+        )
+        patent = Patent.objects.create(reporting_period=self.period, title="Mening patentim", patent_type="invention")
+        patent.authors.add(self.t1)
+
+        self.login(self.t1)
+        page = self.client.get("/kabinet/hisobot/")
+        self.assertContains(page, "/kabinet/hisobot/zip/")
+
+        def zip_of(query=""):
+            response = self.client.get(f"/kabinet/hisobot/zip/{query}")
+            self.assertEqual(response["Content-Type"], "application/zip")
+            archive = zipfile.ZipFile(io.BytesIO(b"".join(response.streaming_content)))
+            xlsx_name = next(n for n in archive.namelist() if n.endswith(".xlsx"))
+            book = openpyxl.load_workbook(io.BytesIO(archive.read(xlsx_name)))
+            titles = [row[2] for row in book["Maqolalar"].iter_rows(min_row=2, values_only=True)]
+            return archive.namelist(), titles, book
+
+        names, titles, book = zip_of()
+        self.assertEqual(sorted(titles), ["Eski maqola", "Mening maqolam"])
+        self.assertTrue(any(n.endswith("/Maqolalar/mening.pdf") for n in names))
+        self.assertFalse(any("2,1" in n for n in names))  # jadval raqami papka nomida yo'q
+        self.assertFalse(any("begona" in n for n in names))
+        self.assertEqual(book["Patentlar"]["C2"].value, "Mening patentim")
+
+        # bitta davr bo'yicha
+        _names, titles, _book = zip_of(f"?davr={self.period.pk}")
+        self.assertEqual(titles, ["Mening maqolam"])
+
+        # boshqa kafedraning davri — e'tiborga olinmaydi, barcha davrlar qaytadi
+        foreign = ReportingPeriod.objects.create(
+            department=Department.objects.create(faculty=self.dep.faculty, name="Boshqa kafedra"),
+            period_label="2026-mart", period_date=datetime.date(2026, 3, 31),
+        )
+        _names, titles, _book = zip_of(f"?davr={foreign.pk}")
+        self.assertEqual(len(titles), 2)

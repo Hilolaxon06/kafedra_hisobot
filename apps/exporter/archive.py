@@ -7,10 +7,10 @@
         Hujjatlar_royxati.xlsx               — какие документы приложены, каких не хватает
                                                (+ лист «Maqolalar»: статьи, h-индекс, квартиль)
         <Ф.И.Ш. преподавателя>/
-            1,1 Diplomlar/                   diplom.pdf
-            2,1 Maqolalar/                   maqola1.pdf, ...
-            2,4-2,5 Patentlar va guvohnomalar/   ...
-            2,6 Mablag'lar/                  shartnoma.pdf
+            Diplomlar/                       diplom.pdf
+            Maqolalar/                       maqola1.pdf, ...
+            Patentlar va guvohnomalar/       ...
+            Mablag'lar/                      shartnoma.pdf
 
 Какие документы куда кладутся — documents.DOCUMENTS. Папки создаются
 только под реально загруженные файлы: нет патента — нет папки «2,4-2,5».

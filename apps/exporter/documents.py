@@ -25,7 +25,7 @@ class DocumentRow:
 @dataclass(frozen=True)
 class DocumentKind:
     sheet: str           # лист формы, для которого нужен документ
-    folder: str          # папка внутри папки преподавателя
+    folder: str          # папка внутри папки преподавателя (без номера таблицы)
     title: str           # вид документа в реестре
     rows: Callable       # rows(period, department_teachers) -> [DocumentRow, ...]
 
@@ -70,8 +70,8 @@ def _fundings(period, _teachers):
 
 
 DOCUMENTS = [
-    DocumentKind("1,1", "1,1 Diplomlar", "Ilmiy daraja diplomi", _diplomas),
-    DocumentKind("2,1", "2,1 Maqolalar", "Maqola PDF", _publications),
-    DocumentKind("2,4-2,5", "2,4-2,5 Patentlar va guvohnomalar", "Patent / guvohnoma", _patents),
-    DocumentKind("2,6", "2,6 Mablag'lar", "Shartnoma / kvitansiya", _fundings),
+    DocumentKind("1,1", "Diplomlar", "Ilmiy daraja diplomi", _diplomas),
+    DocumentKind("2,1", "Maqolalar", "Maqola PDF", _publications),
+    DocumentKind("2,4-2,5", "Patentlar va guvohnomalar", "Patent / guvohnoma", _patents),
+    DocumentKind("2,6", "Mablag'lar", "Shartnoma / kvitansiya", _fundings),
 ]
